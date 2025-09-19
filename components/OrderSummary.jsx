@@ -119,28 +119,28 @@ const OrderSummary = () => {
   }, [user])
 
   return (
-    <div className="w-full md:w-96 bg-gray-500/5 p-5">
-      <h2 className="text-xl md:text-2xl font-medium text-gray-700">
+    <div className="w-full lg:w-96 bg-gray-500/5 p-4 sm:p-5 rounded-xl sm:rounded-2xl">
+      <h2 className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-700">
         Resumen del Pedido
       </h2>
-      <hr className="border-gray-500/30 my-5" />
-      <div className="space-y-6">
+      <hr className="border-gray-500/30 my-4 sm:my-5" />
+      <div className="space-y-4 sm:space-y-6">
         {user ? (
           <div>
-            <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+            <label className="text-sm sm:text-base font-medium uppercase text-gray-600 block mb-2">
               Seleccionar Dirección
             </label>
-            <div className="relative inline-block w-full text-sm border">
+            <div className="relative inline-block w-full text-sm border rounded-lg">
               <button
-                className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
+                className="peer w-full text-left px-3 sm:px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none rounded-lg"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <span>
+                <span className="text-xs sm:text-sm">
                   {selectedAddress
                     ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
                     : "Seleccionar Dirección"}
                 </span>
-                <svg className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
+                <svg className={`w-4 h-4 sm:w-5 sm:h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
                   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6B7280"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
@@ -193,10 +193,10 @@ const OrderSummary = () => {
         )}
 
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <label className="text-sm sm:text-base font-medium uppercase text-gray-600 block mb-2">
             Medio de Pago
           </label>
-          <div className="relative inline-block w-full text-sm border">
+          <div className="relative inline-block w-full text-sm border rounded-lg">
             <select
               value={selectedPaymentMethod?._id || ''}
               onChange={(e) => {
@@ -205,7 +205,7 @@ const OrderSummary = () => {
                 setShowPaymentDetails(!!method);
                 setPaymentProof('');
               }}
-              className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
+              className="peer w-full text-left px-3 sm:px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none rounded-lg text-xs sm:text-sm"
             >
               <option value="">Definir medio de pago</option>
               {paymentMethods.map((method) => (
@@ -280,29 +280,29 @@ const OrderSummary = () => {
         </div>
 
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <label className="text-sm sm:text-base font-medium uppercase text-gray-600 block mb-2">
             Código Promocional
           </label>
-          <div className="flex flex-col items-start gap-3">
+          <div className="flex flex-col sm:flex-row items-start gap-3">
             <input
               type="text"
               placeholder="Ingresa código promocional"
-              className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
+              className="flex-grow w-full outline-none p-2 sm:p-2.5 text-gray-600 border rounded-lg text-sm"
             />
-            <button className="bg-[#feecaf] text-black px-9 py-2 hover:bg-[#feecaf]/80">
+            <button className="bg-[#feecaf] text-black px-6 sm:px-9 py-2 hover:bg-[#feecaf]/80 rounded-lg text-sm sm:text-base w-full sm:w-auto">
               Aplicar
             </button>
           </div>
         </div>
 
-        <hr className="border-gray-500/30 my-5" />
+        <hr className="border-gray-500/30 my-4 sm:my-5" />
 
-        <div className="space-y-4">
-          <div className="flex justify-between text-base font-medium">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex justify-between text-sm sm:text-base font-medium">
             <p className="uppercase text-gray-600">Artículos {getCartCount()}</p>
             <p className="text-gray-800">{formatPrice(getCartAmount())}</p>
           </div>
-          <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
+          <div className="flex justify-between text-base sm:text-lg lg:text-xl font-medium border-t pt-3">
             <p>Total</p>
             <p>{formatPrice(getCartAmount())}</p>
           </div>
@@ -315,7 +315,7 @@ const OrderSummary = () => {
           localStorage.setItem('redirectAfterLogin', window.location.href);
           router.push('/auth/signin');
         }} 
-        className="w-full bg-[#feecaf] text-black py-3 mt-5 hover:bg-[#feecaf]/80"
+        className="w-full bg-[#feecaf] text-black py-3 sm:py-3 mt-4 sm:mt-5 hover:bg-[#feecaf]/80 rounded-lg text-sm sm:text-base font-medium"
       >
         {user ? 'Realizar Pedido' : 'Iniciar Sesión para Comprar'}
       </button>
