@@ -48,30 +48,30 @@ const ProductFilters = ({
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Filtros</h3>
                 <button 
                     onClick={clearFilters}
-                    className="text-sm text-gray-500 hover:text-gray-700 underline"
+                    className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 underline"
                 >
                     Limpiar todo
                 </button>
             </div>
 
             {/* Filtro por categorías */}
-            <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Categorías</h4>
-                <div className="space-y-2">
+            <div className="mb-4 sm:mb-6">
+                <h4 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">Categorías</h4>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
                     {categoriesWithNames.map(category => (
                         <label key={category.id} className="flex items-center">
                             <input
                                 type="checkbox"
                                 checked={localFilters.categories?.includes(category.id) || false}
                                 onChange={() => handleFilterChange('categories', category.id)}
-                                className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                                className="h-3 w-3 sm:h-4 sm:w-4 text-black focus:ring-black border-gray-300 rounded"
                             />
-                            <span className="ml-2 text-sm text-gray-700 capitalize">
+                            <span className="ml-2 text-xs sm:text-sm text-gray-700 capitalize">
                                 {category.name} ({products.filter(p => p.category === category.id).length})
                             </span>
                         </label>
@@ -80,9 +80,9 @@ const ProductFilters = ({
             </div>
 
             {/* Filtro por rango de precios */}
-            <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Rango de precios</h4>
-                <div className="space-y-3">
+            <div className="mb-4 sm:mb-6">
+                <h4 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">Rango de precios</h4>
+                <div className="space-y-2 sm:space-y-3">
                     <div className="flex items-center space-x-2">
                         <input
                             type="number"
@@ -92,9 +92,9 @@ const ProductFilters = ({
                                 ...localFilters.priceRange,
                                 min: parseFloat(e.target.value) || 0
                             })}
-                            className="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
+                            className="w-16 sm:w-20 px-2 py-1 text-xs sm:text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
                         />
-                        <span className="text-gray-500">-</span>
+                        <span className="text-gray-500 text-xs sm:text-sm">-</span>
                         <input
                             type="number"
                             placeholder="Máx"
@@ -103,7 +103,7 @@ const ProductFilters = ({
                                 ...localFilters.priceRange,
                                 max: parseFloat(e.target.value) || maxPrice
                             })}
-                            className="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
+                            className="w-16 sm:w-20 px-2 py-1 text-xs sm:text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
                         />
                     </div>
                     <div className="text-xs text-gray-500">
@@ -113,24 +113,24 @@ const ProductFilters = ({
             </div>
 
             {/* Filtro por disponibilidad */}
-            <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Disponibilidad</h4>
+            <div className="mb-4 sm:mb-6">
+                <h4 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">Disponibilidad</h4>
                 <label className="flex items-center">
                     <input
                         type="checkbox"
                         checked={localFilters.inStock || false}
                         onChange={(e) => handleFilterChange('inStock', e.target.checked)}
-                        className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                        className="h-3 w-3 sm:h-4 sm:w-4 text-black focus:ring-black border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-700">
+                    <span className="ml-2 text-xs sm:text-sm text-gray-700">
                         Solo productos disponibles
                     </span>
                 </label>
             </div>
 
             {/* Contador de resultados */}
-            <div className="pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">
+            <div className="pt-3 sm:pt-4 border-t border-gray-200">
+                <p className="text-xs sm:text-sm text-gray-600">
                     {products.length} productos encontrados
                 </p>
             </div>

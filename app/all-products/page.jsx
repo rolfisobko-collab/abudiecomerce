@@ -164,15 +164,15 @@ const AllProductsContent = () => {
                     <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#feecaf]/10 to-transparent rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-yellow-300/10 to-transparent rounded-full blur-3xl"></div>
                     
-                    <div className="relative z-10 px-6 md:px-16 lg:px-32 py-12">
+                    <div className="relative z-10 px-4 sm:px-6 md:px-16 lg:px-32 py-8 sm:py-12">
                         <div className="flex flex-col items-center text-center">
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4">
+                                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                                 {searchQuery ? 'Resultados de búsqueda' : 'Catálogo completo'}
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 px-4">
                                 {searchQuery ? (
                                     <>
                                         Resultados para <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">"{searchQuery}"</span>
@@ -183,20 +183,20 @@ const AllProductsContent = () => {
                                     </>
                                 )}
                             </h1>
-                            <p className="text-gray-600 text-lg max-w-2xl">
+                            <p className="text-gray-600 text-base sm:text-lg max-w-2xl px-4">
                                 {searchQuery 
                                     ? `Encontramos ${filteredProducts.length} producto${filteredProducts.length !== 1 ? 's' : ''} que coinciden con tu búsqueda`
                                     : 'Descubre nuestra amplia gama de productos de tecnología y electrónicos'
                                 }
                             </p>
-                            <div className="w-24 h-1 bg-gradient-to-r from-[#feecaf] to-yellow-300 rounded-full mt-6"></div>
+                            <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-[#feecaf] to-yellow-300 rounded-full mt-4 sm:mt-6"></div>
                         </div>
                     </div>
                 </div>
                 
                 {/* Contenido principal */}
-                <div className="px-6 md:px-16 lg:px-32 py-8">
-                    <div className="flex gap-8">
+                <div className="px-4 sm:px-6 md:px-16 lg:px-32 py-8">
+                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
                         {/* Sidebar de filtros - Desktop */}
                         <div className="hidden lg:block w-72 flex-shrink-0">
                             <div className="sticky top-24">
@@ -212,7 +212,7 @@ const AllProductsContent = () => {
                         {/* Contenido principal */}
                         <div className="flex-1 min-w-0">
                             {/* Header de productos */}
-                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 mb-8">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-4 sm:p-6 mb-6 lg:mb-8">
                                 <ProductHeader
                                     viewMode={viewMode}
                                     onViewModeChange={setViewMode}
@@ -224,23 +224,58 @@ const AllProductsContent = () => {
                                 />
                             </div>
 
-                            {/* Filtros móviles */}
+                            {/* Filtros móviles - Modal/Drawer */}
                             {showFilters && (
-                                <div className="lg:hidden mb-8">
-                                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-                                        <ProductFilters
-                                            onFiltersChange={setFilters}
-                                            selectedFilters={filters}
-                                        />
+                                <div className="lg:hidden mb-6 lg:mb-8">
+                                    {/* Overlay */}
+                                    <div 
+                                        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                                        onClick={() => setShowFilters(false)}
+                                    ></div>
+                                    
+                                    {/* Drawer de filtros */}
+                                    <div className="fixed inset-y-0 left-0 w-80 max-w-[85vw] bg-white z-50 lg:hidden transform transition-transform duration-300 ease-in-out">
+                                        <div className="h-full flex flex-col">
+                                            {/* Header del drawer */}
+                                            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                                                <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+                                                <button
+                                                    onClick={() => setShowFilters(false)}
+                                                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                                >
+                                                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            
+                                            {/* Contenido del drawer */}
+                                            <div className="flex-1 overflow-y-auto p-4">
+                                                <ProductFilters
+                                                    onFiltersChange={setFilters}
+                                                    selectedFilters={filters}
+                                                />
+                                            </div>
+                                            
+                                            {/* Footer del drawer */}
+                                            <div className="p-4 border-t border-gray-200">
+                                                <button
+                                                    onClick={() => setShowFilters(false)}
+                                                    className="w-full bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 py-3 rounded-xl font-semibold hover:from-yellow-300 hover:to-[#feecaf] transition-all duration-300"
+                                                >
+                                                    Aplicar Filtros
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
                             {/* Lista de productos */}
                             {filteredProducts.length > 0 ? (
-                                <div className="space-y-8">
+                                <div className="space-y-6 lg:space-y-8">
                                     {viewMode === 'grid' ? (
-                                        <div className="flex flex-wrap gap-6 justify-center">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
                                             {filteredProducts.map((product, index) => (
                                                 <ProductCard key={index} product={product} />
                                             ))}

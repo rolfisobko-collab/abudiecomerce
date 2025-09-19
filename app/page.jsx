@@ -47,13 +47,13 @@ const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#feecaf] group"
+      className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#feecaf] group"
     >
-      <div className="w-12 h-12 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-        <Icon className="w-6 h-6 text-gray-800" />
+      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
+        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" />
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{title}</h3>
+      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{description}</p>
     </motion.div>
   );
 };
@@ -90,33 +90,33 @@ const Home = () => {
             <HeaderSlider />
           </AnimatedSection>
 
-          <div className="px-6 md:px-16 lg:px-32">
+          <div className="px-4 sm:px-6 md:px-16 lg:px-32">
         {/* Sección de Productos Populares */}
         <AnimatedSection delay={0.2}>
           <HomeProducts />
         </AnimatedSection>
 
         {/* Sección de Características Destacadas */}
-        <AnimatedSection delay={0.4} className="mt-20 mb-16">
-          <div className="text-center mb-12">
+        <AnimatedSection delay={0.4} className="mt-12 sm:mt-16 lg:mt-20 mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 px-4 py-2 rounded-full text-sm font-semibold mb-4"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
               ¿Por qué elegirnos?
             </motion.div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 px-4">
               La mejor experiencia de <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">compra</span>
             </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+            <p className="text-gray-600 max-w-3xl mx-auto text-base sm:text-lg px-4">
               Ofrecemos productos de calidad premium con el mejor servicio al cliente y garantía total
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <FeatureCard
               icon={TrendingUp}
               title="Productos Trending"
@@ -158,21 +158,21 @@ const Home = () => {
         
         {/* Recomendaciones Inteligentes */}
         <AnimatedSection delay={0.6}>
-          <div className="mt-20">
-            <div className="text-center mb-12">
+          <div className="mt-12 sm:mt-16 lg:mt-20">
+            <div className="text-center mb-8 sm:mb-12">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold mb-4"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4"
               >
-                <Zap className="w-4 h-4" />
+                <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
                 IA Powered
               </motion.div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 px-4">
                 Recomendaciones <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Inteligentes</span>
               </h2>
-              <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+              <p className="text-gray-600 max-w-3xl mx-auto text-base sm:text-lg px-4">
                 Descubre productos seleccionados especialmente para ti basados en tus intereses y comportamiento de compra
               </p>
             </div>

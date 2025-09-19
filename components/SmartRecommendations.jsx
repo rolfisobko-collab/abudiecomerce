@@ -161,18 +161,18 @@ const SmartRecommendations = () => {
                 </div>
                 
                 {/* Contenido principal */}
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-200/50 shadow-xl">
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200/50 shadow-xl">
                     {/* Header de la sección */}
-                    <div className="flex items-center justify-between mb-8">
-                        <div className="flex items-center gap-4">
-                            <div className={`w-16 h-16 bg-gradient-to-br ${config.gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
-                                <IconComponent className="w-8 h-8 text-white" />
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br ${config.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg`}>
+                                <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
                                     {config.title}
                                 </h3>
-                                <p className={`text-sm ${config.textColor} font-medium`}>
+                                <p className={`text-xs sm:text-sm ${config.textColor} font-medium`}>
                                     {config.description}
                                 </p>
                             </div>
@@ -189,7 +189,7 @@ const SmartRecommendations = () => {
                     </div>
 
                     {/* Slider de productos */}
-                    <div className="relative p-4">
+                    <div className="relative p-2 sm:p-4">
                         <ProductSlider
                             title=""
                             products={products}

@@ -163,7 +163,7 @@ const Footer = () => {
               Copyright 2025 © AbudiCell. Todos los derechos reservados.
             </p>
             <div className="flex items-center gap-6">
-              <span className="text-gray-500 text-xs">Hecho con ❤️ para nuestros clientes</span>
+              {/* Espacio para futuros elementos */}
             </div>
           </div>
         </div>

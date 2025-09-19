@@ -44,9 +44,20 @@ export default function SignIn() {
                     toast.success('¡Bienvenido Admin!')
                     router.push('/seller')
                 } else {
-                    console.log('🔍 [LOGIN DEBUG] Usuario normal, redirigiendo a /')
-                    toast.success('¡Bienvenido!')
-                    router.push('/')
+                    console.log('🔍 [LOGIN DEBUG] Usuario normal, verificando redirección')
+                    
+                    // Verificar si hay una URL de redirección guardada
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        console.log('🔍 [LOGIN DEBUG] Redirigiendo a URL guardada:', redirectUrl)
+                        localStorage.removeItem('redirectAfterLogin'); // Limpiar después de usar
+                        toast.success('¡Bienvenido!')
+                        router.push(redirectUrl);
+                    } else {
+                        console.log('🔍 [LOGIN DEBUG] Usuario normal, redirigiendo a /')
+                        toast.success('¡Bienvenido!')
+                        router.push('/')
+                    }
                 }
             }
         } catch (error) {

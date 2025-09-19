@@ -349,7 +349,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Sección móvil */}
+        {/* Sección móvil - Solo buscador y menú hamburguesa */}
         <div className="lg:hidden flex items-center gap-3">
           {/* Buscador móvil */}
           <div className="relative" ref={searchRef}>
@@ -447,86 +447,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Selector de Divisas móvil */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-            <CurrencySelector />
-          </div>
-
-          {/* Carrito móvil */}
-          <button 
-            onClick={() => router.push('/cart')}
-            className="relative flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all duration-300 text-white border border-white/20"
-          >
-            <FaShoppingCart className="w-4 h-4" />
-            {getCartCount() > 0 && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                {getCartCount()}
-              </div>
-            )}
-          </button>
-
-          {/* Usuario móvil */}
-          {user ? (
-            <div className="relative">
-              <button 
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all duration-300 text-white border border-white/20"
-              >
-                <div className="w-6 h-6 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-full flex items-center justify-center">
-                  <Image src={assets.user_icon} alt="user icon" width={12} height={12} />
-                </div>
-              </button>
-              {showUserMenu && (
-                <div className="absolute right-0 mt-3 w-48 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl py-2 z-50 border border-gray-200/50">
-                  <button 
-                    onClick={() => { router.push('/'); setShowUserMenu(false); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 transition-all duration-300"
-                  >
-                    <HomeIcon />
-                    <span>Inicio</span>
-                  </button>
-                  <button 
-                    onClick={() => { router.push('/all-products'); setShowUserMenu(false); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 transition-all duration-300"
-                  >
-                    <BoxIcon />
-                    <span>Productos</span>
-                  </button>
-                  <button 
-                    onClick={() => { router.push('/cart'); setShowUserMenu(false); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 transition-all duration-300"
-                  >
-                    <CartIcon />
-                    <span>Carrito</span>
-                  </button>
-                  <button 
-                    onClick={() => { router.push('/my-orders'); setShowUserMenu(false); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 transition-all duration-300"
-                  >
-                    <BagIcon />
-                    <span>Mis Pedidos</span>
-                  </button>
-                  <hr className="my-2 border-gray-200/50" />
-                  <button 
-                    onClick={() => { signOut(); setShowUserMenu(false); }}
-                    className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 transition-all duration-300 text-left"
-                  >
-                    Cerrar Sesión
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link 
-              href="/auth/signin" 
-              className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all duration-300 text-white border border-white/20"
-            >
-              <div className="w-6 h-6 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-full flex items-center justify-center">
-                <Image src={assets.user_icon} alt="user icon" width={12} height={12} />
-              </div>
-            </Link>
-          )}
-
           {/* Menú hamburguesa */}
           <button 
             onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -541,6 +461,7 @@ const Navbar = () => {
       {showMobileMenu && (
         <div className="lg:hidden bg-black/95 backdrop-blur-md border-t border-gray-800/50">
           <div className="px-4 py-4 space-y-3">
+            {/* Navegación principal */}
             <Link 
               href="/" 
               onClick={() => setShowMobileMenu(false)}
@@ -573,6 +494,70 @@ const Navbar = () => {
               <FaUser className="w-4 h-4" />
               <span>Contacto</span>
             </Link>
+
+            {/* Separador */}
+            <hr className="my-4 border-gray-700/50" />
+
+            {/* Selector de Divisas */}
+            <div className="px-4 py-3">
+              <div className="text-white text-sm font-medium mb-2">Moneda</div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+                <CurrencySelector />
+              </div>
+            </div>
+
+            {/* Carrito */}
+            <button 
+              onClick={() => { router.push('/cart'); setShowMobileMenu(false); }}
+              className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-300 w-full text-left"
+            >
+              <div className="relative">
+                <FaShoppingCart className="w-4 h-4" />
+                {getCartCount() > 0 && (
+                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    {getCartCount()}
+                  </div>
+                )}
+              </div>
+              <span>Carrito ({getCartCount()} artículos)</span>
+            </button>
+
+            {/* Usuario */}
+            {user ? (
+              <div className="space-y-2">
+                <div className="flex items-center gap-3 px-4 py-3 text-white">
+                  <div className="w-8 h-8 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-full flex items-center justify-center">
+                    <Image src={assets.user_icon} alt="user icon" width={16} height={16} />
+                  </div>
+                  <span className="font-medium">{user.name}</span>
+                </div>
+                <button 
+                  onClick={() => { router.push('/my-orders'); setShowMobileMenu(false); }}
+                  className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-300 w-full text-left"
+                >
+                  <BagIcon />
+                  <span>Mis Pedidos</span>
+                </button>
+                <button 
+                  onClick={() => { signOut(); setShowMobileMenu(false); }}
+                  className="flex items-center gap-3 px-4 py-3 text-white hover:bg-red-500/20 rounded-xl transition-all duration-300 w-full text-left"
+                >
+                  <FaUser className="w-4 h-4" />
+                  <span>Cerrar Sesión</span>
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/auth/signin" 
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-300"
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-full flex items-center justify-center">
+                  <Image src={assets.user_icon} alt="user icon" width={16} height={16} />
+                </div>
+                <span>Iniciar Sesión</span>
+              </Link>
+            )}
           </div>
         </div>
       )}
