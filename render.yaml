@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: quickcart-abudi
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://rolfisobko:Rolfi2346@abudicell.igpcvgh.mongodb.net/quickcart?retryWrites=true&w=majority&appName=abudicell
+      - key: NEXTAUTH_URL
+        value: https://quickcart-abudi.onrender.com
+      - key: NEXTAUTH_SECRET
+        value: quickcart-secret-key-2024
+      - key: NEXT_PUBLIC_CURRENCY
+        value: $
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        value: pk_test_c3F1YXJlLXNhbG1vbi03Ni5jbGVyay5hY2NvdW50cy5kZXYk
+      - key: CLERK_SECRET_KEY
+        value: sk_test_E4a8Juj2CZ1qedaUS9kPDb50nUGfZYPYSiz3mhIgFp
+      - key: INNGEST_SIGNING_KEY
+        value: signkey-prod-850ba69f7efbbd6fb4f67ab9b1d67f799e68627193d35bb51a43f4405d59d029
+      - key: INNGEST_EVENT_KEY
+        value: YOTwfEvMvdng9uDo7sGR9MarN1hl8tvjm-m37kDUf6-doz3H6KRY8LMgQKXeydV2ec_1aPh7fvd0xRszI8MhAw
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dxibpzcfy
+      - key: CLOUDINARY_API_KEY
+        value: 395575268427478
+      - key: CLOUDINARY_API_SECRET
+        value: bbE8bMA7stCyME9srmYdw98m0sE
