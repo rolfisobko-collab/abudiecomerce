@@ -6,10 +6,13 @@ import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { FaSearch, FaTimes, FaShoppingCart, FaBars, FaUser } from "react-icons/fa";
+import CurrencySelector from "./CurrencySelector";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const Navbar = () => {
 
   const { isSeller, router, user, signOut, products, cartItems } = useAppContext();
+  const { formatPrice } = useCurrency();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -250,7 +253,7 @@ const Navbar = () => {
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-gray-900 truncate group-hover:text-[#feecaf] transition-colors">{product.name}</h4>
                         <p className="text-sm text-gray-500 truncate capitalize">{product.category}</p>
-                        <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">${product.price}</p>
+                        <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">{formatPrice(product.price)}</p>
                       </div>
                     </button>
                   ))}
@@ -281,6 +284,11 @@ const Navbar = () => {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Selector de Divisas */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+            <CurrencySelector />
           </div>
 
           {/* Carrito */}
@@ -407,7 +415,7 @@ const Navbar = () => {
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-gray-900 truncate text-sm group-hover:text-[#feecaf] transition-colors">{product.name}</h4>
                         <p className="text-xs text-gray-500 truncate capitalize">{product.category}</p>
-                        <p className="text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">${product.price}</p>
+                        <p className="text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">{formatPrice(product.price)}</p>
                       </div>
                     </button>
                   ))}
@@ -438,7 +446,12 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          
+
+          {/* Selector de Divisas móvil */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+            <CurrencySelector />
+          </div>
+
           {/* Carrito móvil */}
           <button 
             onClick={() => router.push('/cart')}

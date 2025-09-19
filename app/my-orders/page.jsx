@@ -3,24 +3,25 @@ import React, { useEffect, useState } from "react";
 import { assets, orderDummyData } from "@/assets/assets";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Loading from "@/components/Loading";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import { Package, MapPin, CreditCard, Calendar, Truck, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { Package, MapPin, CreditCard, Calendar, Truck, CheckCircle, Clock, AlertCircle, RefreshCw } from "lucide-react";
 
 const MyOrders = () => {
 
     const { currency, getToken, user } = useAppContext();
+    const { formatPrice } = useCurrency();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchOrders = async () => {
         try {
-            
             const token = await getToken()
 
             const {data} = await axios.get('/api/order/list', {headers:{Authorization:`Bearer ${token}`}})
@@ -42,15 +43,49 @@ const MyOrders = () => {
         }
     }, [user]);
 
+    // Refrescar datos automáticamente cada 5 segundos para sincronizar con la BD
+    useEffect(() => {
+        if (!user) return;
+
+        const interval = setInterval(() => {
+            fetchOrders();
+        }, 5000); // 5 segundos
+
+        return () => clearInterval(interval);
+    }, [user]);
+
+    // Refrescar datos cuando la página vuelve a estar visible
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (!document.hidden && user) {
+                fetchOrders();
+            }
+        };
+
+        const handleFocus = () => {
+            if (user) {
+                fetchOrders();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
+        
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, [user]);
+
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'pendiente':
+            case 'Order Placed':
                 return <Clock className="w-4 h-4" />;
-            case 'en_procesado':
+            case 'Processing':
                 return <Package className="w-4 h-4" />;
-            case 'en_camino':
+            case 'Shipped':
                 return <Truck className="w-4 h-4" />;
-            case 'entregado':
+            case 'Delivered':
                 return <CheckCircle className="w-4 h-4" />;
             default:
                 return <AlertCircle className="w-4 h-4" />;
@@ -59,13 +94,13 @@ const MyOrders = () => {
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'pendiente':
+            case 'Order Placed':
                 return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-            case 'en_procesado':
+            case 'Processing':
                 return 'bg-blue-100 text-blue-800 border-blue-200';
-            case 'en_camino':
+            case 'Shipped':
                 return 'bg-purple-100 text-purple-800 border-purple-200';
-            case 'entregado':
+            case 'Delivered':
                 return 'bg-green-100 text-green-800 border-green-200';
             default:
                 return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -98,9 +133,20 @@ const MyOrders = () => {
                             <h1 className="text-4xl font-bold text-gray-900 mb-4">
                                 Mis <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#feecaf] to-yellow-300">Pedidos</span>
                             </h1>
-                            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                            <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-6">
                                 Revisa el estado de todos tus pedidos y su historial
                             </p>
+                            
+                            {/* Botón de refresh manual */}
+                            <motion.button
+                                onClick={fetchOrders}
+                                className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-sm"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                                Actualizar Pedidos
+                            </motion.button>
                         </div>
 
                         {/* Lista de pedidos */}
@@ -149,7 +195,7 @@ const MyOrders = () => {
                                                             <div className="space-y-1">
                                                                 {order.items.map((item, itemIndex) => (
                                                                     <p key={itemIndex} className="text-sm text-gray-600">
-                                                                        {item.product.name} x {item.quantity}
+                                                                        {item.product?.name || 'Producto no disponible'} x {item.quantity}
                                                                     </p>
                                                                 ))}
                                                             </div>
@@ -178,8 +224,8 @@ const MyOrders = () => {
                                                 <div className="space-y-4">
                                                     <div className="text-right">
                                                         <p className="text-2xl font-bold text-gray-900">
-                                                            {currency}{order.amount}
-                                    </p>
+                                                            {formatPrice(order.amount)}
+                                                        </p>
                                 </div>
                                                     
                                                     <div className="space-y-3">
@@ -194,16 +240,16 @@ const MyOrders = () => {
                                                             <Calendar className="w-4 h-4 text-gray-500" />
                                                             <span className="text-sm text-gray-600">
                                                                 {new Date(order.date).toLocaleDateString('es-ES')}
-                                                            </span>
+                                        </span>
                                                         </div>
                                                         
                                                         <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
                                                             {getStatusIcon(order.status)}
-                                            {order.status === 'pendiente' ? 'Pendiente' :
-                                             order.status === 'en_procesado' ? 'En Procesado' :
-                                             order.status === 'en_camino' ? 'En Camino' :
-                                             order.status === 'entregado' ? 'Entregado' :
-                                             'Pendiente'}
+                                                            {order.status === 'Order Placed' ? 'Pendiente' :
+                                                             order.status === 'Processing' ? 'En Procesado' :
+                                                             order.status === 'Shipped' ? 'En Camino' :
+                                                             order.status === 'Delivered' ? 'Entregado' :
+                                                             order.status}
                                                         </div>
                                                     </div>
                                                 </div>

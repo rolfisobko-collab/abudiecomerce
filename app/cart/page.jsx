@@ -6,10 +6,12 @@ import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useAppContext } from "@/context/AppContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const CartContent = () => {
   const searchParams = useSearchParams();
   const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount, setCartItems, generateCartShareUrl } = useAppContext();
+  const { formatPrice } = useCurrency();
 
   // Función para cargar carrito desde URL
   useEffect(() => {
@@ -147,7 +149,7 @@ const CartContent = () => {
                               <div className="flex items-center gap-4 mb-3">
                                 <div className="flex flex-col">
                                   <span className={`text-lg font-bold ${cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) ? 'text-green-600' : 'text-gray-900'}`}>
-                                    ${cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) ? product.offerPrice : product.price}
+                                    {formatPrice(cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) ? product.offerPrice : product.price)}
                                   </span>
                                   {cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) && (
                                     <span className="text-xs text-green-600 font-medium">Precio Mayorista</span>
@@ -191,7 +193,7 @@ const CartContent = () => {
                             <div className="flex flex-col items-end gap-3">
                               <div className="text-right">
                                 <p className="text-lg font-bold text-gray-900">
-                                  ${((cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) ? product.offerPrice : product.price) * cartItems[itemId]).toFixed(2)}
+                                  {formatPrice(((cartItems[itemId] >= (product.minQuantity && product.minQuantity > 0 ? product.minQuantity : 1) ? product.offerPrice : product.price) * cartItems[itemId]))}
                                 </p>
                                 <p className="text-xs text-gray-500">Subtotal</p>
                               </div>

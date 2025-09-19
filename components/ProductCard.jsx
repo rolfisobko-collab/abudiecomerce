@@ -4,11 +4,13 @@ import { ShoppingCart, Eye, Heart } from 'lucide-react'
 import { assets } from '@/assets/assets'
 import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
+import { useCurrency } from '@/context/CurrencyContext';
 import StarRating from './StarRating';
 
 const ProductCard = ({ product }) => {
 
-    const { currency, router, getCategoryName, addToCart } = useAppContext()
+    const { router, getCategoryName, addToCart } = useAppContext()
+    const { formatPrice } = useCurrency()
 
     return (
         <motion.div
@@ -113,11 +115,11 @@ const ProductCard = ({ product }) => {
                     {/* Precio */}
                     <div className="flex items-center gap-2 mb-3">
                         <span className="text-lg font-bold text-gray-900">
-                            {currency}{product.offerPrice}
+                            {formatPrice(product.offerPrice)}
                         </span>
                         {product.price > product.offerPrice && (
                             <span className="text-sm text-gray-500 line-through">
-                                {currency}{product.price}
+                                {formatPrice(product.price)}
                             </span>
                         )}
                     </div>

@@ -112,13 +112,6 @@ export default function AdminLogin() {
                         </p>
                     </div>
 
-                    <div className="mt-6 p-4 bg-blue-50 rounded-md">
-                        <h3 className="text-sm font-medium text-blue-800 mb-2">Credenciales de Admin:</h3>
-                        <div className="text-xs text-blue-700 space-y-1">
-                            <p><strong>Usuario:</strong> abudicell</p>
-                            <p><strong>Contraseña:</strong> abudi1234*</p>
-                        </div>
-                    </div>
 
                     <div className="text-center">
                         <a href="/" className="text-sm text-[#feecaf] hover:text-[#feecaf]/80">

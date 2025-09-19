@@ -28,7 +28,12 @@ export async function POST(request) {
         // calculate amount using items
         const amount = await items.reduce(async (acc, item) => {
             const product = await Product.findById(item.product);
-            return await acc + product.offerPrice * item.quantity;
+            if (!product) {
+                console.error(`❌ [ORDER CREATE DEBUG] Producto no encontrado con ID: ${item.product}`);
+                return await acc;
+            }
+            const price = product.offerPrice || product.price;
+            return await acc + price * item.quantity;
         }, 0)
 
         console.log('🔍 [ORDER CREATE DEBUG] Guardando orden directamente en la base de datos...')

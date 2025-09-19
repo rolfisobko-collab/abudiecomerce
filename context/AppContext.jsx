@@ -13,7 +13,6 @@ export const useAppContext = () => {
 
 export const AppContextProvider = (props) => {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY
     const router = useRouter()
 
     const { data: session, status } = useSession()
@@ -282,7 +281,7 @@ export const AppContextProvider = (props) => {
 
     const value = {
         user, signOut, getToken,
-        currency, router,
+        router,
         isSeller, setIsSeller,
         userData, fetchUserData,
         products, fetchProductData,

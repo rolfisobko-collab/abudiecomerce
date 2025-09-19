@@ -4,6 +4,7 @@ import { ArrowRight, TrendingUp, ShoppingCart } from "lucide-react";
 import ProductCard from "./ProductCard";
 import Loading from "./Loading";
 import { useAppContext } from "@/context/AppContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 import StarRating from "./StarRating";
@@ -37,7 +38,8 @@ const HomeProducts = () => {
 
   // Componente de ProductCard más pequeño para la home
   const SmallProductCard = ({ product }) => {
-    const { currency, router, getCategoryName, addToCart } = useAppContext()
+    const { router, getCategoryName, addToCart } = useAppContext()
+    const { formatPrice } = useCurrency()
 
     return (
       <motion.div
@@ -100,15 +102,15 @@ const HomeProducts = () => {
               {product.offerPrice && product.offerPrice < product.price ? (
                 <>
                   <span className="text-lg font-bold text-gray-900">
-                    {currency}{product.offerPrice}
+                    {formatPrice(product.offerPrice)}
                   </span>
                   <span className="text-sm text-gray-500 line-through">
-                    {currency}{product.price}
+                    {formatPrice(product.price)}
                   </span>
                 </>
               ) : (
                 <span className="text-lg font-bold text-gray-900">
-                  {currency}{product.price}
+                  {formatPrice(product.price)}
                 </span>
               )}
             </div>
