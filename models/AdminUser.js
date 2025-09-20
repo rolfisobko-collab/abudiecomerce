@@ -20,11 +20,6 @@ const AdminUserSchema = new mongoose.Schema({
     required: [true, "La contraseña es requerida"],
     minLength: [6, "La contraseña debe tener al menos 6 caracteres"]
   },
-  role: {
-    type: String,
-    enum: ['super_admin', 'admin', 'editor'],
-    default: 'admin'
-  },
   permissions: {
     addProduct: {
       type: Boolean,
@@ -34,11 +29,23 @@ const AdminUserSchema = new mongoose.Schema({
       type: Boolean,
       default: true
     },
+    categories: {
+      type: Boolean,
+      default: true
+    },
+    brands: {
+      type: Boolean,
+      default: true
+    },
     orders: {
       type: Boolean,
       default: true
     },
     paymentMethods: {
+      type: Boolean,
+      default: true
+    },
+    communications: {
       type: Boolean,
       default: true
     },

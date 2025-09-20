@@ -31,12 +31,14 @@ const AdminUsers = () => {
     username: '',
     name: '',
     password: '',
-    role: 'admin',
     permissions: {
       addProduct: true,
       productList: true,
+      categories: true,
+      brands: true,
       orders: true,
       paymentMethods: true,
+      communications: true,
       adminUsers: false
     }
   })
@@ -145,12 +147,14 @@ const AdminUsers = () => {
       username: '',
       name: '',
       password: '',
-      role: 'admin',
       permissions: {
         addProduct: true,
         productList: true,
+        categories: true,
+        brands: true,
         orders: true,
         paymentMethods: true,
+        communications: true,
         adminUsers: false
       }
     })
@@ -363,8 +367,11 @@ const AdminUsers = () => {
                           <span className="text-sm text-gray-700">
                             {key === 'addProduct' && 'Agregar Productos'}
                             {key === 'productList' && 'Lista de Productos'}
+                            {key === 'categories' && 'Categorías'}
+                            {key === 'brands' && 'Marcas'}
                             {key === 'orders' && 'Pedidos'}
                             {key === 'paymentMethods' && 'Métodos de Pago'}
+                            {key === 'communications' && 'Comunicaciones'}
                             {key === 'adminUsers' && 'Usuarios Admin'}
                           </span>
                         </label>
@@ -483,8 +490,11 @@ const AdminUsers = () => {
                           <span className="text-sm text-gray-700">
                             {key === 'addProduct' && 'Agregar Productos'}
                             {key === 'productList' && 'Lista de Productos'}
+                            {key === 'categories' && 'Categorías'}
+                            {key === 'brands' && 'Marcas'}
                             {key === 'orders' && 'Pedidos'}
                             {key === 'paymentMethods' && 'Métodos de Pago'}
+                            {key === 'communications' && 'Comunicaciones'}
                             {key === 'adminUsers' && 'Usuarios Admin'}
                           </span>
                         </label>

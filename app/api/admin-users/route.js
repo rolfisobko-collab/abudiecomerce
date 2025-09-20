@@ -34,7 +34,7 @@ export async function POST(request) {
     await connectDB();
 
     const body = await request.json();
-    const { username, name, password, role, permissions } = body;
+    const { username, name, password, permissions } = body;
 
     // Validaciones
     if (!username || !name || !password) {
@@ -62,12 +62,14 @@ export async function POST(request) {
       username,
       name,
       password: hashedPassword,
-      role: role || 'admin',
       permissions: permissions || {
         addProduct: true,
         productList: true,
+        categories: true,
+        brands: true,
         orders: true,
         paymentMethods: true,
+        communications: true,
         adminUsers: false
       }
     });
