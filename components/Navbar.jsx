@@ -144,6 +144,7 @@ const Navbar = () => {
   };
 
   const handleResultClick = (productId) => {
+    console.log('🔍 [SEARCH DEBUG] Click en producto:', productId);
     router.push(`/product/${productId}`);
     setShowSearchResults(false);
     setIsSearchFocused(false);
@@ -228,7 +229,12 @@ const Navbar = () => {
                   {searchResults.map((product) => (
                     <button
                       key={product._id}
-                      onClick={() => handleResultClick(product._id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔍 [SEARCH DEBUG] Botón clickeado para producto:', product._id, product.name);
+                        handleResultClick(product._id);
+                      }}
                       className="w-full flex items-center gap-4 p-3 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 rounded-xl transition-all duration-300 text-left group"
                     >
                       <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0 overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
@@ -390,7 +396,12 @@ const Navbar = () => {
                   {searchResults.map((product) => (
                     <button
                       key={product._id}
-                      onClick={() => handleResultClick(product._id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔍 [SEARCH DEBUG] Botón móvil clickeado para producto:', product._id, product.name);
+                        handleResultClick(product._id);
+                      }}
                       className="w-full flex items-center gap-3 p-2 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 rounded-xl transition-all duration-300 text-left group"
                     >
                       <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex-shrink-0 overflow-hidden shadow-sm">
