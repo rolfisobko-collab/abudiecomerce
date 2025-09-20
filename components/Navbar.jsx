@@ -145,7 +145,18 @@ const Navbar = () => {
 
   const handleResultClick = (productId) => {
     console.log('🔍 [SEARCH DEBUG] Click en producto:', productId);
-    router.push(`/product/${productId}`);
+    console.log('🔍 [SEARCH DEBUG] Router disponible:', !!router);
+    console.log('🔍 [SEARCH DEBUG] URL a navegar:', `/product/${productId}`);
+    
+    try {
+      router.push(`/product/${productId}`);
+      console.log('✅ [SEARCH DEBUG] Navegación iniciada');
+    } catch (error) {
+      console.error('❌ [SEARCH DEBUG] Error en navegación:', error);
+      // Fallback: usar window.location
+      window.location.href = `/product/${productId}`;
+    }
+    
     setShowSearchResults(false);
     setIsSearchFocused(false);
     setSearchQuery('');
@@ -230,9 +241,11 @@ const Navbar = () => {
                     <button
                       key={product._id}
                       onClick={(e) => {
+                        console.log('🔍 [SEARCH DEBUG] Evento click detectado!');
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('🔍 [SEARCH DEBUG] Botón clickeado para producto:', product._id, product.name);
+                        console.log('🔍 [SEARCH DEBUG] Producto completo:', product);
                         handleResultClick(product._id);
                       }}
                       className="w-full flex items-center gap-4 p-3 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 rounded-xl transition-all duration-300 text-left group"
@@ -397,9 +410,11 @@ const Navbar = () => {
                     <button
                       key={product._id}
                       onClick={(e) => {
+                        console.log('🔍 [SEARCH DEBUG] Evento click móvil detectado!');
                         e.preventDefault();
                         e.stopPropagation();
                         console.log('🔍 [SEARCH DEBUG] Botón móvil clickeado para producto:', product._id, product.name);
+                        console.log('🔍 [SEARCH DEBUG] Producto móvil completo:', product);
                         handleResultClick(product._id);
                       }}
                       className="w-full flex items-center gap-3 p-2 hover:bg-gradient-to-r hover:from-[#feecaf]/10 hover:to-yellow-300/10 rounded-xl transition-all duration-300 text-left group"
