@@ -21,6 +21,8 @@ const Navbar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef(null);
   const resultsRef = useRef(null);
+  const mobileSearchRef = useRef(null);
+  const mobileResultsRef = useRef(null);
 
   // Función para obtener el contador del carrito
   const getCartCount = () => {
@@ -123,8 +125,12 @@ const Navbar = () => {
   // Cerrar resultados al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target) &&
-          resultsRef.current && !resultsRef.current.contains(event.target)) {
+      const isDesktopSearch = searchRef.current && searchRef.current.contains(event.target);
+      const isDesktopResults = resultsRef.current && resultsRef.current.contains(event.target);
+      const isMobileSearch = mobileSearchRef.current && mobileSearchRef.current.contains(event.target);
+      const isMobileResults = mobileResultsRef.current && mobileResultsRef.current.contains(event.target);
+      
+      if (!isDesktopSearch && !isDesktopResults && !isMobileSearch && !isMobileResults) {
         setShowSearchResults(false);
         setIsSearchFocused(false);
       }
@@ -371,7 +377,7 @@ const Navbar = () => {
         {/* Sección móvil - Solo buscador y menú hamburguesa */}
         <div className="lg:hidden flex items-center gap-3">
           {/* Buscador móvil */}
-          <div className="relative" ref={searchRef}>
+          <div className="relative" ref={mobileSearchRef}>
             <form onSubmit={handleSearchSubmit} className="relative">
               <input
                 type="text"
@@ -399,7 +405,7 @@ const Navbar = () => {
             {/* Resultados de búsqueda móvil */}
             {showSearchResults && searchResults.length > 0 && (
               <div 
-                ref={resultsRef}
+                ref={mobileResultsRef}
                 className="absolute top-full left-0 right-0 mt-3 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 z-50 max-h-80 overflow-y-auto"
               >
                 <div className="p-3">
