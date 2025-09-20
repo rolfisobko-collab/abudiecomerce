@@ -59,7 +59,7 @@ export async function PUT(request, { params }) {
 
     const { id } = await params;
     const body = await request.json();
-    const { username, name, password, role, permissions, isActive } = body;
+    const { username, name, password, permissions, isActive } = body;
 
     const user = await AdminUser.findById(id);
     if (!user) {
@@ -84,7 +84,6 @@ export async function PUT(request, { params }) {
     const updateData = {};
     if (username) updateData.username = username;
     if (name) updateData.name = name;
-    if (role) updateData.role = role;
     if (permissions) updateData.permissions = permissions;
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
 

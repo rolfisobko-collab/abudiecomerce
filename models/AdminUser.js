@@ -73,7 +73,6 @@ const AdminUserSchema = new mongoose.Schema({
 
 // Índices para optimizar consultas
 AdminUserSchema.index({ username: 1 });
-AdminUserSchema.index({ role: 1 });
 AdminUserSchema.index({ isActive: 1 });
 
 // Eliminar el modelo existente si tiene el campo email

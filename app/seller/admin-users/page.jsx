@@ -92,7 +92,6 @@ const AdminUsers = () => {
       username: user.username,
       name: user.name,
       password: '',
-      role: user.role,
       permissions: user.permissions
     })
     setShowEditModal(true)
@@ -170,23 +169,6 @@ const AdminUsers = () => {
     }))
   }
 
-  const getRoleColor = (role) => {
-    switch (role) {
-      case 'super_admin': return 'bg-red-100 text-red-800'
-      case 'admin': return 'bg-blue-100 text-blue-800'
-      case 'editor': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
-
-  const getRoleLabel = (role) => {
-    switch (role) {
-      case 'super_admin': return 'Super Admin'
-      case 'admin': return 'Admin'
-      case 'editor': return 'Editor'
-      default: return role
-    }
-  }
 
   useEffect(() => {
     if (user) {
@@ -223,7 +205,6 @@ const AdminUsers = () => {
                 <tr>
                   <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[120px]">Usuario</th>
                   <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[150px]">Nombre Completo</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[100px]">Rol</th>
                   <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[100px]">Estado</th>
                   <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[120px]">Último Login</th>
                   <th className="px-4 py-3 font-medium whitespace-nowrap min-w-[120px]">Acciones</th>
@@ -239,11 +220,6 @@ const AdminUsers = () => {
                       <span className="font-medium">{user.username}</span>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">{user.name}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                        {getRoleLabel(user.role)}
-                      </span>
-                    </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -336,20 +312,6 @@ const AdminUsers = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Rol
-                    </label>
-                    <select
-                      value={formData.role}
-                      onChange={(e) => setFormData({...formData, role: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
-                    >
-                      <option value="editor">Editor</option>
-                      <option value="admin">Admin</option>
-                      <option value="super_admin">Super Admin</option>
-                    </select>
-                  </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -459,20 +421,6 @@ const AdminUsers = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Rol
-                    </label>
-                    <select
-                      value={formData.role}
-                      onChange={(e) => setFormData({...formData, role: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
-                    >
-                      <option value="editor">Editor</option>
-                      <option value="admin">Admin</option>
-                      <option value="super_admin">Super Admin</option>
-                    </select>
-                  </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
