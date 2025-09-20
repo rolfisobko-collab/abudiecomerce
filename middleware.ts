@@ -1,5 +1,17 @@
 import { NextResponse } from "next/server";
 
+// Mapeo de rutas a permisos
+const ROUTE_PERMISSIONS = {
+  '/seller': 'addProduct',
+  '/seller/product-list': 'productList',
+  '/seller/categories': 'categories',
+  '/seller/brands': 'brands',
+  '/seller/orders': 'orders',
+  '/seller/payment-methods': 'paymentMethods',
+  '/seller/communications': 'communications',
+  '/seller/admin-users': 'adminUsers'
+};
+
 export function middleware(req) {
   console.log('🔍 [MIDDLEWARE DEBUG] Ruta:', req.nextUrl.pathname);
   
@@ -12,6 +24,23 @@ export function middleware(req) {
       console.log('❌ [MIDDLEWARE DEBUG] Acceso denegado a /seller - redirigiendo a admin-login');
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
+    
+    // Verificar permisos específicos
+    const userPermissions = req.cookies.get('admin-permissions');
+    if (userPermissions) {
+      try {
+        const permissions = JSON.parse(userPermissions.value);
+        const requiredPermission = ROUTE_PERMISSIONS[req.nextUrl.pathname];
+        
+        if (requiredPermission && !permissions[requiredPermission]) {
+          console.log('❌ [MIDDLEWARE DEBUG] Sin permiso para:', req.nextUrl.pathname, 'Permiso requerido:', requiredPermission);
+          return NextResponse.redirect(new URL('/seller?error=no-permission', req.url));
+        }
+      } catch (error) {
+        console.log('❌ [MIDDLEWARE DEBUG] Error al parsear permisos:', error);
+      }
+    }
+    
     console.log('✅ [MIDDLEWARE DEBUG] Acceso autorizado a /seller');
   }
   

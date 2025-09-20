@@ -14,11 +14,11 @@ export async function POST(request) {
         }
 
         console.log('🔍 [ADMIN LOGIN API DEBUG] Verificando credenciales...');
-        const isValid = await verifyAdminCredentials(username, password);
+        const authResult = await verifyAdminCredentials(username, password);
 
-        if (isValid) {
+        if (authResult && authResult.isValid) {
             console.log('✅ [ADMIN LOGIN API DEBUG] Credenciales válidas, creando sesión...');
-            return createAdminSession();
+            return createAdminSession(authResult.permissions);
         } else {
             console.log('❌ [ADMIN LOGIN API DEBUG] Credenciales inválidas');
             return NextResponse.json({ success: false, message: "Credenciales incorrectas" });

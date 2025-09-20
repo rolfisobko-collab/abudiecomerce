@@ -69,6 +69,12 @@ const AdminUsers = () => {
 
   const handleCreate = async () => {
     try {
+      // Validación en el frontend
+      if (!formData.username || !formData.name || !formData.password) {
+        toast.error('Por favor completa todos los campos requeridos')
+        return
+      }
+      
       const { data } = await axios.post('/api/admin-users', formData, {
         withCredentials: true
       })
@@ -81,8 +87,9 @@ const AdminUsers = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      toast.error('Error al crear usuario')
-      console.error('Error:', error)
+      console.error('❌ [ERROR] Error completo:', error)
+      console.error('❌ [ERROR] Response data:', error.response?.data)
+      toast.error(error.response?.data?.message || 'Error al crear usuario')
     }
   }
 
