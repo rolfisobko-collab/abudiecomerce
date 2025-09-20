@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
     return (
         <motion.div
             onClick={() => { router.push('/product/' + product._id); scrollTo(0, 0) }}
-            className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#feecaf] cursor-pointer w-full max-w-[240px] h-[360px] flex flex-col mx-auto"
+            className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#feecaf] cursor-pointer w-full max-w-[240px] min-h-[360px] flex flex-col mx-auto"
             whileHover={{ y: -5 }}
             whileTap={{ scale: 0.98 }}
         >
@@ -85,8 +85,8 @@ const ProductCard = ({ product }) => {
             </div>
 
             {/* Contenido del producto */}
-            <div className="p-3 flex flex-col flex-1 justify-between">
-                <div className="flex-1">
+            <div className="p-3 flex flex-col flex-1 justify-between min-h-0">
+                <div className="flex-1 min-h-0">
                     <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2 leading-tight text-sm">
                         {product.name}
                     </h3>
@@ -126,18 +126,20 @@ const ProductCard = ({ product }) => {
                 </div>
 
                 {/* Botón de agregar al carrito */}
-                <motion.button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(product._id, 1);
-                    }}
-                    className="w-full bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 py-2.5 px-4 rounded-xl font-semibold hover:from-yellow-300 hover:to-[#feecaf] transition-all duration-300 flex items-center justify-center gap-2 group/btn"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
-                    <span>Agregar al carrito</span>
-                </motion.button>
+                <div className="mt-auto pt-2">
+                    <motion.button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            addToCart(product._id, 1);
+                        }}
+                        className="w-full bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 py-2.5 px-4 rounded-xl font-semibold hover:from-yellow-300 hover:to-[#feecaf] transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                        <span>Agregar al carrito</span>
+                    </motion.button>
+                </div>
             </div>
         </motion.div>
     )
