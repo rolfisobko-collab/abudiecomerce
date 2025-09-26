@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.21",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@svgr/webpack": "^8.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "inngest-cli": "^1.11.10",

@@ -13,7 +13,7 @@ const Unauthorized = () => {
         {/* Logo */}
         <div className="mb-6">
           <Image
-            src={assets.logo}
+            src="/abudilogo2.png"
             alt="AbudiCell Logo"
             width={120}
             height={60}

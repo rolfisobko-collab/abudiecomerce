@@ -84,3 +84,6 @@ const migrateProducts = async () => {
 // Ejecutar migración
 migrateProducts();
 
+
+
+

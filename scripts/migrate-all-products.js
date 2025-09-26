@@ -96,3 +96,6 @@ const migrateAllProducts = async () => {
 // Ejecutar migración
 migrateAllProducts();
 
+
+
+

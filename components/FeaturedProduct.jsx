@@ -45,7 +45,9 @@ const FeaturedProduct = () => {
                 {description}
               </p>
               <button className="flex items-center gap-1.5 bg-[#feecaf] text-black px-4 py-2 rounded hover:bg-[#feecaf]/80 transition-colors">
-                Comprar ahora <Image className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />
+                Comprar ahora <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
               </button>
             </div>
           </div>

@@ -33,7 +33,9 @@ const Banner = () => {
           </p>
           <button className="group flex items-center justify-center gap-1 px-8 sm:px-12 py-2 sm:py-2.5 bg-[#feecaf] rounded text-black hover:bg-[#feecaf]/80 transition-colors text-sm sm:text-base">
             Comprar ahora
-            <Image className="group-hover:translate-x-1 transition w-4 h-4" src={assets.arrow_icon_white} alt="arrow_icon_white" />
+            <svg className="group-hover:translate-x-1 transition w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </button>
         </div>
         <Image
