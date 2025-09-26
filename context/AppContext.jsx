@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+// Configurar timeout global para Axios
+axios.defaults.timeout = 30000; // 30 segundos
+
 export const AppContext = createContext();
 
 export const useAppContext = () => {
@@ -36,6 +39,11 @@ export const AppContextProvider = (props) => {
     }
 
     const [products, setProducts] = useState([])
+    
+    // Log cuando cambian los productos
+    useEffect(() => {
+        console.log('🔍 [CONTEXT DEBUG] Estado de productos actualizado:', products.length)
+    }, [products])
     const [categories, setCategories] = useState([])
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(false) // No se usa para admin, solo para compatibilidad
@@ -44,30 +52,12 @@ export const AppContextProvider = (props) => {
 
     const fetchProductData = async (forceRefresh = false) => {
         try {
+            console.log('🔍 [CONTEXT DEBUG] fetchProductData iniciado')
+            console.log('🔍 [CONTEXT DEBUG] forceRefresh:', forceRefresh)
             setIsLoadingProducts(true)
             
-            // Verificar si hay datos en localStorage y si no es un refresh forzado
-            if (!forceRefresh && typeof window !== 'undefined') {
-                const cachedProducts = localStorage.getItem('quickcart_products')
-                const cacheTimestamp = localStorage.getItem('quickcart_products_timestamp')
-                
-                // Si hay datos cacheados y no han pasado más de 5 minutos, usarlos
-                if (cachedProducts && cacheTimestamp) {
-                    const now = Date.now()
-                    const cacheAge = now - parseInt(cacheTimestamp)
-                    const tenMinutes = 10 * 60 * 1000 // 10 minutos en milisegundos (optimizado para Atlas)
-                    
-                    if (cacheAge < tenMinutes) {
-                        console.log('📦 Cargando productos desde localStorage')
-                        setProducts(JSON.parse(cachedProducts))
-                        setIsLoadingProducts(false)
-                        
-                        // Cargar datos frescos en segundo plano
-                        fetchProductDataFromAPI()
-                        return
-                    }
-                }
-            }
+            // TEMPORALMENTE DESHABILITADO: Siempre ir a la API
+            console.log('🔍 [CONTEXT DEBUG] Saltando localStorage, yendo directo a API')
             
             // Si no hay cache válido, cargar desde la API
             await fetchProductDataFromAPI()
@@ -81,9 +71,10 @@ export const AppContextProvider = (props) => {
 
     const fetchProductDataFromAPI = async () => {
         try {
+            console.log('🔍 [CONTEXT DEBUG] fetchProductDataFromAPI iniciado')
             console.log('🌐 Cargando productos desde Atlas (API)')
             const {data} = await axios.get('/api/product/list', {
-                timeout: 10000 // 10 segundos timeout para Atlas
+                timeout: 30000 // 30 segundos timeout para Atlas
             })
 
             if (data.success) {
@@ -100,7 +91,10 @@ export const AppContextProvider = (props) => {
                                : ['/placeholder-product.jpeg']
                     }))
                 
+                console.log('🔍 [CONTEXT DEBUG] Productos procesados:', productsWithImagesAndMinQuantity.length)
+                console.log('🔍 [CONTEXT DEBUG] Primer producto procesado:', productsWithImagesAndMinQuantity[0])
                 setProducts(productsWithImagesAndMinQuantity)
+                console.log('🔍 [CONTEXT DEBUG] setProducts ejecutado')
                 
                 // Guardar en localStorage de forma asíncrona para no bloquear UI
                 if (typeof window !== 'undefined') {
@@ -118,6 +112,7 @@ export const AppContextProvider = (props) => {
             console.error('Error fetching products from Atlas API:', error)
             toast.error('Error al cargar productos desde Atlas')
         } finally {
+            console.log('🔍 [CONTEXT DEBUG] fetchProductDataFromAPI terminado')
             setIsLoadingProducts(false)
         }
     }
@@ -262,8 +257,22 @@ export const AppContextProvider = (props) => {
     };
 
     useEffect(() => {
-        fetchProductData()
-        fetchCategories()
+        console.log('🔍 [CONTEXT DEBUG] useEffect ejecutado - cargando productos y categorías')
+        console.log('🔍 [CONTEXT DEBUG] Estado inicial - productos:', products.length, 'cargando:', isLoadingProducts)
+        
+        // Llamar a las funciones de carga inmediatamente
+        const loadData = async () => {
+            try {
+                console.log('🔍 [CONTEXT DEBUG] Iniciando carga de datos...')
+                await fetchProductData()
+                await fetchCategories()
+                console.log('🔍 [CONTEXT DEBUG] Datos cargados exitosamente')
+            } catch (error) {
+                console.error('🔍 [CONTEXT DEBUG] Error cargando datos:', error)
+            }
+        }
+        
+        loadData()
     }, [])
 
     useEffect(() => {

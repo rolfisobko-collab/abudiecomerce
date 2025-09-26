@@ -11,13 +11,19 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 
 const AllProductsContent = () => {
-    const { products } = useAppContext();
+    const { products, categories, getCategoryName, isLoadingProducts } = useAppContext();
+    
+    console.log('🔍 [ALL PRODUCTS DEBUG] Productos cargados:', products.length);
+    console.log('🔍 [ALL PRODUCTS DEBUG] Categorías cargadas:', categories.length);
+    console.log('🔍 [ALL PRODUCTS DEBUG] Cargando productos:', isLoadingProducts);
     const searchParams = useSearchParams();
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
     const [sortBy, setSortBy] = useState('name');
     const [filters, setFilters] = useState({});
+    
+    console.log('🔍 [ALL PRODUCTS DEBUG] Estado inicial de filtros:', filters);
     const [showFilters, setShowFilters] = useState(false);
 
     // Función de búsqueda súper potente (igual que en navbar)
@@ -85,28 +91,48 @@ const AllProductsContent = () => {
     // Función para aplicar filtros
     const applyFilters = (productList) => {
         let filtered = [...productList];
+        
+        console.log('🔍 [FILTER DEBUG] Productos originales:', productList.length);
+        console.log('🔍 [FILTER DEBUG] Filtros activos:', filters);
+        console.log('🔍 [FILTER DEBUG] Tipo de filtros:', typeof filters, filters);
 
         // Filtro por categorías
         if (filters.categories && filters.categories.length > 0) {
+            console.log('🔍 [FILTER DEBUG] Aplicando filtro de categorías:', filters.categories);
             filtered = filtered.filter(product => 
                 filters.categories.includes(product.category)
             );
+            console.log('🔍 [FILTER DEBUG] Después de filtro de categorías:', filtered.length);
+        }
+
+        // Filtro por marcas
+        if (filters.brands && filters.brands.length > 0) {
+            console.log('🔍 [FILTER DEBUG] Aplicando filtro de marcas:', filters.brands);
+            filtered = filtered.filter(product => 
+                filters.brands.includes(product.brand)
+            );
+            console.log('🔍 [FILTER DEBUG] Después de filtro de marcas:', filtered.length);
         }
 
         // Filtro por rango de precios
         if (filters.priceRange) {
             const { min, max } = filters.priceRange;
+            console.log('🔍 [FILTER DEBUG] Aplicando filtro de precios:', { min, max });
             filtered = filtered.filter(product => {
                 const price = product.offerPrice;
                 return price >= (min || 0) && price <= (max || Infinity);
             });
+            console.log('🔍 [FILTER DEBUG] Después de filtro de precios:', filtered.length);
         }
 
         // Filtro por disponibilidad
         if (filters.inStock) {
+            console.log('🔍 [FILTER DEBUG] Aplicando filtro de stock');
             filtered = filtered.filter(product => product.stock > 0);
+            console.log('🔍 [FILTER DEBUG] Después de filtro de stock:', filtered.length);
         }
 
+        console.log('🔍 [FILTER DEBUG] Productos filtrados finales:', filtered.length);
         return filtered;
     };
 
@@ -189,6 +215,26 @@ const AllProductsContent = () => {
                                     : 'Descubre nuestra amplia gama de productos de tecnología y electrónicos'
                                 }
                             </p>
+                            
+                            {/* Mostrar búsqueda actual */}
+                            {searchQuery && (
+                                <div className="mt-4 flex items-center justify-center gap-2">
+                                    <span className="text-sm text-gray-600">Búsqueda:</span>
+                                    <span className="bg-[#feecaf] text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        "{searchQuery}"
+                                    </span>
+                                    <button 
+                                        onClick={() => {
+                                            setSearchQuery('')
+                                            // Limpiar URL
+                                            window.history.replaceState({}, '', '/all-products')
+                                        }}
+                                        className="text-gray-500 hover:text-gray-700 text-sm underline"
+                                    >
+                                        Limpiar
+                                    </button>
+                                </div>
+                            )}
                             <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-[#feecaf] to-yellow-300 rounded-full mt-4 sm:mt-6"></div>
                         </div>
                     </div>
@@ -202,6 +248,7 @@ const AllProductsContent = () => {
                             <div className="sticky top-24">
                                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
                                     <ProductFilters
+                                        products={products}
                                         onFiltersChange={setFilters}
                                         selectedFilters={filters}
                                     />

@@ -45,18 +45,21 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get('/api/admin-users', {
-        withCredentials: true
-      })
+      const { data } = await axios.get('/api/admin-users')
       if (data.success) {
         setUsers(data.users)
         setLoading(false)
       } else {
-        toast.error(data.message)
+        console.log('❌ [ADMIN USERS DEBUG] Error en API:', data.message)
+        if (data.message === 'No autorizado') {
+          toast.error('No tienes permisos para acceder a esta página. Por favor, inicia sesión como admin.')
+        } else {
+          toast.error(data.message)
+        }
         setLoading(false)
       }
     } catch (error) {
-      console.error('Error:', error)
+      console.error('❌ [ADMIN USERS DEBUG] Error completo:', error)
       if (error.response?.status === 401) {
         toast.error('No autorizado. Por favor, inicia sesión como admin.')
         setLoading(false)
@@ -75,9 +78,7 @@ const AdminUsers = () => {
         return
       }
       
-      const { data } = await axios.post('/api/admin-users', formData, {
-        withCredentials: true
-      })
+      const { data } = await axios.post('/api/admin-users', formData)
       if (data.success) {
         toast.success('Usuario creado exitosamente')
         setShowCreateModal(false)
@@ -111,9 +112,7 @@ const AdminUsers = () => {
         delete updateData.password
       }
       
-      const { data } = await axios.put(`/api/admin-users/${editingUser._id}`, updateData, {
-        withCredentials: true
-      })
+      const { data } = await axios.put(`/api/admin-users/${editingUser._id}`, updateData)
       if (data.success) {
         toast.success('Usuario actualizado exitosamente')
         setShowEditModal(false)
@@ -132,9 +131,7 @@ const AdminUsers = () => {
   const handleDelete = async (userId) => {
     if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
       try {
-        const { data } = await axios.delete(`/api/admin-users/${userId}`, {
-          withCredentials: true
-        })
+        const { data } = await axios.delete(`/api/admin-users/${userId}`)
         if (data.success) {
           toast.success('Usuario eliminado exitosamente')
           fetchUsers()
@@ -178,16 +175,37 @@ const AdminUsers = () => {
 
 
   useEffect(() => {
-    if (user) {
-      fetchUsers()
-    }
-  }, [user])
+    // Para páginas de admin, no necesitamos esperar a que user exista
+    fetchUsers()
+  }, [])
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
           <Loading />
+        </div>
+      ) : users.length === 0 && !loading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Acceso No Autorizado
+            </h3>
+            <p className="text-gray-600 mb-6">
+              No tienes permisos para acceder a esta página. Por favor, inicia sesión como administrador.
+            </p>
+            <a 
+              href="/admin-login"
+              className="inline-flex items-center px-4 py-2 bg-[#feecaf] text-black rounded-md hover:bg-[#feecaf]/80 transition-colors"
+            >
+              Ir al Login de Admin
+            </a>
+          </div>
         </div>
       ) : (
         <>

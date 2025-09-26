@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test WhatsApp API</title>
+</head>
+<body>
+    <h1>Test WhatsApp API</h1>
+    <button onclick="testAPI()">Probar API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            try {
+                console.log('🔍 [TEST] Iniciando prueba de API...');
+                
+                const response = await fetch('/api/seller/whatsapp/chats');
+                console.log('🔍 [TEST] Status:', response.status);
+                console.log('🔍 [TEST] Headers:', response.headers);
+                
+                const data = await response.json();
+                console.log('🔍 [TEST] Respuesta:', data);
+                
+                document.getElementById('result').innerHTML = `
+                    <h2>Resultado:</h2>
+                    <p>Status: ${response.status}</p>
+                    <p>Success: ${data.success}</p>
+                    <p>Chats: ${data.chats ? data.chats.length : 0}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('❌ [TEST] Error:', error);
+                document.getElementById('result').innerHTML = `
+                    <h2>Error:</h2>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

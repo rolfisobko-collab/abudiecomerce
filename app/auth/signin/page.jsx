@@ -91,8 +91,14 @@ export default function SignIn() {
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-2xl flex items-center justify-center shadow-lg">
-                                <Shield className="w-10 h-10 text-gray-800" />
+                            <div className="w-24 h-24 bg-black rounded-2xl flex items-center justify-center shadow-lg">
+                                <Image
+                                    src="/abudilogo2.png"
+                                    alt="AbudiCell Logo"
+                                    width={80}
+                                    height={40}
+                                    className="object-contain"
+                                />
                             </div>
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">

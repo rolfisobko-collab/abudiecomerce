@@ -9,23 +9,30 @@ const ROUTE_PERMISSIONS = {
   '/seller/orders': 'orders',
   '/seller/payment-methods': 'paymentMethods',
   '/seller/communications': 'communications',
-  '/seller/admin-users': 'adminUsers'
+  '/seller/admin-users': 'adminUsers',
+  // '/seller/whatsapp': 'whatsapp' // WhatsApp accesible para todos los admins
 };
 
 export function middleware(req) {
   console.log('🔍 [MIDDLEWARE DEBUG] Ruta:', req.nextUrl.pathname);
   
-  // Solo proteger rutas de admin/seller con sistema separado
+  // Solo proteger rutas de seller con sistema separado
   if (req.nextUrl.pathname.startsWith('/seller')) {
     const adminSession = req.cookies.get('admin-session');
     console.log('🔍 [MIDDLEWARE DEBUG] Admin session:', adminSession ? 'Presente' : 'Ausente');
     
     if (!adminSession || adminSession.value !== 'authenticated') {
-      console.log('❌ [MIDDLEWARE DEBUG] Acceso denegado a /seller - redirigiendo a admin-login');
+      console.log('❌ [MIDDLEWARE DEBUG] Acceso denegado a', req.nextUrl.pathname, '- redirigiendo a admin-login');
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
     
-    // Verificar permisos específicos
+    // Excepción para WhatsApp - accesible para todos los admins
+    if (req.nextUrl.pathname === '/seller/whatsapp') {
+      console.log('✅ [MIDDLEWARE DEBUG] WhatsApp accesible para todos los admins');
+      return NextResponse.next();
+    }
+    
+    // Verificar permisos específicos para otras rutas
     const userPermissions = req.cookies.get('admin-permissions');
     if (userPermissions) {
       try {
@@ -41,7 +48,7 @@ export function middleware(req) {
       }
     }
     
-    console.log('✅ [MIDDLEWARE DEBUG] Acceso autorizado a /seller');
+    console.log('✅ [MIDDLEWARE DEBUG] Acceso autorizado a', req.nextUrl.pathname);
   }
   
   // Permitir todo lo demás sin validación

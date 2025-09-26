@@ -31,17 +31,17 @@ const PaymentMethods = () => {
 
     const fetchPaymentMethods = async () => {
         try {
-            const { data } = await axios.get('/api/payment-methods', {
-                withCredentials: true
-            });
+            const { data } = await axios.get('/api/payment-methods');
             if (data.success) {
                 setPaymentMethods(data.paymentMethods);
                 setLoading(false);
             } else {
+                console.log('❌ [PAYMENT METHODS DEBUG] Error en API:', data.message);
                 toast.error(data.message);
                 setLoading(false);
             }
         } catch (error) {
+            console.error('❌ [PAYMENT METHODS DEBUG] Error completo:', error);
             toast.error('Error al cargar medios de pago');
             setLoading(false);
         }
@@ -50,9 +50,7 @@ const PaymentMethods = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post('/api/payment-methods', formData, {
-                withCredentials: true
-            });
+            const { data } = await axios.post('/api/payment-methods', formData);
             if (data.success) {
                 toast.success('Medio de pago creado exitosamente');
                 setFormData({
@@ -86,9 +84,7 @@ const PaymentMethods = () => {
     const handleDelete = async (id) => {
         if (confirm('¿Estás seguro de que quieres eliminar este medio de pago?')) {
             try {
-                const { data } = await axios.delete(`/api/payment-methods/${id}`, {
-                    withCredentials: true
-                });
+                const { data } = await axios.delete(`/api/payment-methods/${id}`);
                 if (data.success) {
                     toast.success('Medio de pago eliminado exitosamente');
                     fetchPaymentMethods();
@@ -102,10 +98,9 @@ const PaymentMethods = () => {
     };
 
     useEffect(() => {
-        if (user) {
-            fetchPaymentMethods();
-        }
-    }, [user]);
+        // Para páginas de admin, no necesitamos esperar a que user exista
+        fetchPaymentMethods();
+    }, []);
 
     return (
         <div className="flex-1 h-screen overflow-scroll flex flex-col justify-between text-sm">

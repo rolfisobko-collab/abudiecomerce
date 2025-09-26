@@ -39,7 +39,6 @@ export async function POST(request) {
         const hashedPassword = await bcrypt.hash(password, 10)
         
         const newUser = new User({
-            _id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             name,
             email,
             password: hashedPassword,

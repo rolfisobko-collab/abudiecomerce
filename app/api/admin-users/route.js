@@ -7,6 +7,15 @@ import bcrypt from "bcryptjs";
 // GET - Listar todos los usuarios admin
 export async function GET() {
   try {
+    // Verificar autenticación de admin
+    const authResult = await isAdminAuthenticated();
+    if (!authResult.success) {
+      return NextResponse.json({
+        success: false,
+        message: "No autorizado"
+      }, { status: 401 });
+    }
+
     await connectDB();
 
     const users = await AdminUser.find({ isActive: true })
@@ -31,6 +40,15 @@ export async function GET() {
 // POST - Crear nuevo usuario admin
 export async function POST(request) {
   try {
+    // Verificar autenticación de admin
+    const authResult = await isAdminAuthenticated();
+    if (!authResult.success) {
+      return NextResponse.json({
+        success: false,
+        message: "No autorizado"
+      }, { status: 401 });
+    }
+
     await connectDB();
 
     const body = await request.json();

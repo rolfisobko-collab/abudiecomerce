@@ -26,8 +26,8 @@ export async function GET() {
 // POST - Crear nuevo medio de pago (solo admin)
 export async function POST(request) {
   try {
-    const isAdmin = await isAdminAuthenticated();
-    if (!isAdmin) {
+    const authResult = await isAdminAuthenticated();
+    if (!authResult.success) {
       return NextResponse.json({
         success: false,
         message: "No autorizado"

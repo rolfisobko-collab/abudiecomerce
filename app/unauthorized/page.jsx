@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { assets } from '@/assets/assets'
 import Image from 'next/image'
 
 const Unauthorized = () => {

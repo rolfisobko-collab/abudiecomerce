@@ -11,19 +11,46 @@ const Layout = ({ children }) => {
   useEffect(() => {
     // Obtener permisos desde las cookies
     const getAdminPermissions = () => {
-      const cookies = document.cookie.split(';')
-      const permissionsCookie = cookies.find(cookie => 
-        cookie.trim().startsWith('admin-permissions=')
-      )
-      
-      if (permissionsCookie) {
-        try {
+      try {
+        const cookies = document.cookie.split(';')
+        const permissionsCookie = cookies.find(cookie => 
+          cookie.trim().startsWith('admin-permissions=')
+        )
+        
+        if (permissionsCookie) {
           const permissionsValue = permissionsCookie.split('=')[1]
           const permissions = JSON.parse(decodeURIComponent(permissionsValue))
+          console.log('🔍 [LAYOUT DEBUG] Permisos obtenidos:', permissions)
           setAdminPermissions(permissions)
-        } catch (error) {
-          console.error('Error al parsear permisos:', error)
+        } else {
+          console.log('🔍 [LAYOUT DEBUG] No se encontraron permisos en cookies')
+          // Para desarrollo, dar permisos completos si no hay cookies
+          setAdminPermissions({
+            addProduct: true,
+            productList: true,
+            categories: true,
+            brands: true,
+            orders: true,
+            paymentMethods: true,
+            communications: true,
+            whatsapp: true, // WhatsApp siempre disponible
+            adminUsers: true
+          })
         }
+      } catch (error) {
+        console.error('Error al parsear permisos:', error)
+        // En caso de error, dar permisos completos para desarrollo
+        setAdminPermissions({
+          addProduct: true,
+          productList: true,
+          categories: true,
+          brands: true,
+          orders: true,
+          paymentMethods: true,
+          communications: true,
+          whatsapp: true, // WhatsApp siempre disponible
+          adminUsers: true
+        })
       }
     }
     

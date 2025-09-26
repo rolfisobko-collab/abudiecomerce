@@ -9,7 +9,8 @@ import {
     MdAdminPanelSettings,
     MdCategory,
     MdEmail,
-    MdBrandingWatermark
+    MdBrandingWatermark,
+    MdChat
 } from 'react-icons/md';
 
 const SideBar = ({ userPermissions }) => {
@@ -24,16 +25,28 @@ const SideBar = ({ userPermissions }) => {
         { name: 'Pedidos', path: '/seller/orders', icon: MdLocalShipping, permission: 'orders' },
         { name: 'Métodos de Pago', path: '/seller/payment-methods', icon: MdPayment, permission: 'paymentMethods' },
         { name: 'Comunicaciones', path: '/seller/communications', icon: MdEmail, permission: 'communications' },
+        { name: 'WhatsApp Chat', path: '/seller/whatsapp', icon: MdChat, permission: 'whatsapp' },
         { name: 'Usuarios Admin', path: '/seller/admin-users', icon: MdAdminPanelSettings, permission: 'adminUsers' },
     ];
 
     // Filtrar elementos del menú basado en permisos
     const menuItems = allMenuItems.filter(item => {
+        // WhatsApp siempre visible para todos los admins
+        if (item.permission === 'whatsapp') {
+            console.log('🔍 [SIDEBAR DEBUG] WhatsApp siempre visible')
+            return true;
+        }
+        
         // Si no hay permisos definidos, mostrar todos (para desarrollo)
-        if (!userPermissions) return true;
+        if (!userPermissions) {
+            console.log('🔍 [SIDEBAR DEBUG] No hay permisos, mostrando todos los elementos')
+            return true;
+        }
         
         // Verificar si el usuario tiene el permiso específico
-        return userPermissions[item.permission] === true;
+        const hasPermission = userPermissions[item.permission] === true;
+        console.log(`🔍 [SIDEBAR DEBUG] ${item.name} (${item.permission}): ${hasPermission}`)
+        return hasPermission;
     });
 
     return (

@@ -2,11 +2,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { useCurrency } from '@/context/CurrencyContext'
 import { ChevronDown } from 'lucide-react'
+import Image from 'next/image'
 
 export default function CurrencySelector() {
     const { selectedCurrency, setSelectedCurrency, currencies, isLoadingRates } = useCurrency()
     const [isOpen, setIsOpen] = useState(false)
     const dropdownRef = useRef(null)
+
+    // URLs de las banderas
+    const flagUrls = {
+        'USD': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/2560px-Flag_of_the_United_States.svg.png',
+        'ARS': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/2560px-Flag_of_Argentina.svg.png',
+        'BRL': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/2560px-Flag_of_Brazil.svg.png',
+        'PYG': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Flag_of_Paraguay.svg/330px-Flag_of_Paraguay.svg.png'
+    }
 
     // Cerrar dropdown al hacer click fuera
     useEffect(() => {
@@ -35,7 +44,15 @@ export default function CurrencySelector() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             >
-                <span className="text-lg">{currentCurrency?.flag}</span>
+                <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                        src={flagUrls[currentCurrency?.code] || '/placeholder-product.jpeg'}
+                        alt={`Bandera de ${currentCurrency?.name}`}
+                        width={24}
+                        height={24}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
                 <span className="hidden sm:inline">{currentCurrency?.code}</span>
                 {isLoadingRates ? (
                     <div className="w-4 h-4 border-2 border-gray-400/30 border-t-gray-600 rounded-full animate-spin"></div>
@@ -58,7 +75,15 @@ export default function CurrencySelector() {
                                     : 'text-gray-700'
                             }`}
                         >
-                            <span className="text-lg">{currency.flag}</span>
+                            <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                                <Image
+                                    src={flagUrls[currency.code] || '/placeholder-product.jpeg'}
+                                    alt={`Bandera de ${currency.name}`}
+                                    width={24}
+                                    height={24}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
                             <div className="flex flex-col items-start">
                                 <span className="font-medium">{currency.code}</span>
                                 <span className="text-xs text-gray-500">{currency.name}</span>

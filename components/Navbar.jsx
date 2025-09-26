@@ -367,7 +367,7 @@ const Navbar = () => {
               className="flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all duration-300 text-white border border-white/20"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-[#feecaf] to-yellow-300 rounded-full flex items-center justify-center">
-                <Image src={assets.user_icon} alt="user icon" width={16} height={16} />
+                <FaUser className="w-4 h-4 text-gray-800" />
               </div>
               <span className="font-medium">Cuenta</span>
             </Link>

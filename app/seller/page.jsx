@@ -1,15 +1,14 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { assets } from "@/assets/assets";
-import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/ImageUpload";
 
 const AddProduct = () => {
 
 
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([null, null, null, null]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -19,6 +18,7 @@ const AddProduct = () => {
   const [minWholesaleQuantity, setMinWholesaleQuantity] = useState('');
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [isCreating, setIsCreating] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -56,6 +56,13 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevenir múltiples envíos
+    if (isCreating) {
+      return;
+    }
+
+    setIsCreating(true);
+
     const formData = new FormData()
 
     formData.append('name',name)
@@ -68,7 +75,9 @@ const AddProduct = () => {
 
 
     for (let i = 0; i < files.length; i++) {
-      formData.append('images',files[i])
+      if (files[i]) {
+        formData.append('images',files[i])
+      }
     }
 
     try {
@@ -77,7 +86,7 @@ const AddProduct = () => {
 
       if (data.success) {
         toast.success(data.message)
-        setFiles([]);
+        setFiles([null, null, null, null]);
         setName('');
         setDescription('');
         setCategory(categories.length > 0 ? categories[0]._id : '');
@@ -92,6 +101,8 @@ const AddProduct = () => {
       
     } catch (error) {
       toast.error(error.message)
+    } finally {
+      setIsCreating(false);
     }
 
 
@@ -101,27 +112,13 @@ const AddProduct = () => {
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
         <div>
-          <p className="text-base font-medium">Imagen del Producto <span className="text-sm text-gray-500">(opcional)</span></p>
-          <div className="flex flex-wrap items-center gap-3 mt-2">
-
-            {[...Array(4)].map((_, index) => (
-              <label key={index} htmlFor={`image${index}`}>
-                <input onChange={(e) => {
-                  const updatedFiles = [...files];
-                  updatedFiles[index] = e.target.files[0];
-                  setFiles(updatedFiles);
-                }} type="file" id={`image${index}`} hidden />
-                <Image
-                  key={index}
-                  className="max-w-24 cursor-pointer"
-                  src={files[index] ? URL.createObjectURL(files[index]) : "/upload_area.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                />
-              </label>
-            ))}
-
+          <p className="text-base font-medium">Imágenes del Producto <span className="text-sm text-gray-500">(opcional)</span></p>
+          <div className="mt-2">
+            <ImageUpload 
+              files={files}
+              setFiles={setFiles}
+              maxFiles={4}
+            />
           </div>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
@@ -236,8 +233,23 @@ const AddProduct = () => {
             />
           </div>
         </div>
-        <button type="submit" className="px-8 py-2.5 bg-[#feecaf] text-black font-medium rounded">
-          AGREGAR
+        <button 
+          type="submit" 
+          disabled={isCreating}
+          className={`px-8 py-2.5 font-medium rounded flex items-center justify-center gap-2 transition-all ${
+            isCreating 
+              ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+              : 'bg-[#feecaf] text-black hover:bg-[#feecaf]/80'
+          }`}
+        >
+          {isCreating ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+              Creando producto...
+            </>
+          ) : (
+            'AGREGAR'
+          )}
         </button>
       </form>
       {/* <Footer /> */}

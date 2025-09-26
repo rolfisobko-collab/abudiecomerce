@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import { assets } from "@/assets/assets";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import Loading from "@/components/Loading";
@@ -610,7 +609,7 @@ const ProductList = () => {
                     </td>
                     <td className="px-4 py-3 flex items-center space-x-3 whitespace-nowrap">
                       <div className="bg-gray-500/10 rounded p-2 w-20 h-20 flex items-center justify-center overflow-hidden">
-                        {product.image && product.image[0] ? (
+                        {product.image && product.image[0] && product.image[0].trim() !== '' ? (
                       <Image
                         src={product.image[0]}
                         alt="product Image"
@@ -658,12 +657,10 @@ const ProductList = () => {
                           className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-600 rounded-md hover:bg-green-200 transition-colors"
                         >
                           <span className="hidden md:block">Ver</span>
-                      <Image
-                        className="h-3.5"
-                        src={assets.redirect_icon}
-                        alt="redirect_icon"
-                      />
-                    </button>
+                          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </button>
                       </div>
                   </td>
                 </tr>
