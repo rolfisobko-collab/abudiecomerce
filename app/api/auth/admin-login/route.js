@@ -22,6 +22,9 @@ export async function POST(request) {
 
     console.log('🔍 [LOGIN DEBUG] Intentando login:', { username, password: '***' });
 
+    // Conectar a la base de datos primero
+    await connectDB();
+
     let user = null;
     let isValidPassword = false;
 
@@ -48,7 +51,6 @@ export async function POST(request) {
     } else {
       // Si no son hardcodeadas, verificar en la base de datos
       console.log('🔍 [LOGIN DEBUG] Verificando en base de datos...');
-      await connectDB();
       
       const adminUser = await AdminUser.findOne({ username });
       if (adminUser && adminUser.isActive) {
