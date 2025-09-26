@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/config/db";
-import AdminUser from "@/models/AdminUser";
-import bcrypt from "bcryptjs";
 
 export async function POST(request) {
   try {
@@ -14,57 +11,61 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    await connectDB();
+    // Credenciales hardcodeadas (sin base de datos)
+    const validCredentials = {
+      'abudicell': 'abudicell1234',
+      'admin': 'admin123'
+    };
 
-    // Buscar usuario admin
-    const adminUser = await AdminUser.findOne({ username, isActive: true });
-    
-    if (!adminUser) {
+    console.log('🔍 [LOGIN DEBUG] Intentando login:', { username, password: '***' });
+    console.log('🔍 [LOGIN DEBUG] Credenciales válidas:', Object.keys(validCredentials));
+
+    // Verificar credenciales
+    if (validCredentials[username] && validCredentials[username] === password) {
+      console.log('✅ [LOGIN DEBUG] Credenciales válidas para:', username);
+      
+      // Crear cookie de sesión admin
+      const response = NextResponse.json({
+        success: true,
+        message: "Login exitoso",
+        user: {
+          id: 'hardcoded_' + username,
+          username: username,
+          name: username === 'abudicell' ? 'Abudi Cell Admin' : 'Administrador Principal',
+          permissions: {
+            addProduct: true,
+            productList: true,
+            categories: true,
+            brands: true,
+            orders: true,
+            paymentMethods: true,
+            communications: true,
+            adminUsers: true,
+            whatsapp: true
+          }
+        }
+      });
+
+      // Establecer cookie de sesión admin
+      response.cookies.set('admin-session', 'authenticated', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+      });
+
+      console.log('✅ [LOGIN DEBUG] Cookie establecida, login exitoso');
+      return response;
+    } else {
+      console.log('❌ [LOGIN DEBUG] Credenciales inválidas');
       return NextResponse.json({
         success: false,
         message: "Credenciales incorrectas"
       }, { status: 401 });
     }
-
-    // Verificar contraseña
-    const isPasswordValid = await bcrypt.compare(password, adminUser.password);
-    
-    if (!isPasswordValid) {
-      return NextResponse.json({
-        success: false,
-        message: "Credenciales incorrectas"
-      }, { status: 401 });
-    }
-
-    // Actualizar último login
-    await AdminUser.findByIdAndUpdate(adminUser._id, { 
-      lastLogin: new Date() 
-    });
-
-    // Crear cookie de sesión admin
-    const response = NextResponse.json({
-      success: true,
-      message: "Login exitoso",
-      user: {
-        id: adminUser._id,
-        username: adminUser.username,
-        name: adminUser.name,
-        permissions: adminUser.permissions
-      }
-    });
-
-    // Establecer cookie de sesión admin
-    response.cookies.set('admin-session', 'authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000 // 24 horas
-    });
-
-    return response;
 
   } catch (error) {
-    console.error("Error en login de admin:", error);
+    console.error("❌ [LOGIN DEBUG] Error en login de admin:", error);
     return NextResponse.json({
       success: false,
       message: "Error interno del servidor"

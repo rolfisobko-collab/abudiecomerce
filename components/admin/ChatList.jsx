@@ -57,19 +57,28 @@ const ChatList = ({ chats, selectedChat, onSelectChat }) => {
 
   const formatTime = (timestamp) => {
     if (!timestamp) return ''
-    const date = new Date(timestamp * 1000)
-    const now = new Date()
-    const diffTime = now - date
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    
-    if (diffDays === 0) {
-      return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-    } else if (diffDays === 1) {
-      return 'Ayer'
-    } else if (diffDays < 7) {
-      return date.toLocaleDateString('es-ES', { weekday: 'short' })
-    } else {
-      return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })
+    try {
+      // El timestamp ya viene en formato ISO, no multiplicar por 1000
+      const date = new Date(timestamp)
+      if (isNaN(date.getTime())) {
+        return ''
+      }
+      const now = new Date()
+      const diffTime = now - date
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+      
+      if (diffDays === 0) {
+        return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+      } else if (diffDays === 1) {
+        return 'Ayer'
+      } else if (diffDays < 7) {
+        return date.toLocaleDateString('es-ES', { weekday: 'short' })
+      } else {
+        return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })
+      }
+    } catch (error) {
+      console.error('Error formateando tiempo en ChatList:', error)
+      return ''
     }
   }
 

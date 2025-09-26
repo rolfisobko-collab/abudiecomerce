@@ -7,25 +7,43 @@ const Message = ({ message }) => {
 
   const formatTime = (timestamp) => {
     if (!timestamp) return ''
-    const date = new Date(timestamp * 1000)
-    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+    try {
+      // El timestamp ya viene en formato ISO, no multiplicar por 1000
+      const date = new Date(timestamp)
+      if (isNaN(date.getTime())) {
+        return ''
+      }
+      return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+    } catch (error) {
+      console.error('Error formateando tiempo:', error)
+      return ''
+    }
   }
 
   const formatDate = (timestamp) => {
     if (!timestamp) return ''
-    const date = new Date(timestamp * 1000)
-    const now = new Date()
-    const diffTime = now - date
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    
-    if (diffDays === 0) {
-      return 'Hoy'
-    } else if (diffDays === 1) {
-      return 'Ayer'
-    } else if (diffDays < 7) {
-      return date.toLocaleDateString('es-ES', { weekday: 'long' })
-    } else {
-      return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    try {
+      // El timestamp ya viene en formato ISO, no multiplicar por 1000
+      const date = new Date(timestamp)
+      if (isNaN(date.getTime())) {
+        return ''
+      }
+      const now = new Date()
+      const diffTime = now - date
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+      
+      if (diffDays === 0) {
+        return 'Hoy'
+      } else if (diffDays === 1) {
+        return 'Ayer'
+      } else if (diffDays < 7) {
+        return date.toLocaleDateString('es-ES', { weekday: 'long' })
+      } else {
+        return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      }
+    } catch (error) {
+      console.error('Error formateando fecha:', error)
+      return ''
     }
   }
 
@@ -33,10 +51,20 @@ const Message = ({ message }) => {
   const shouldShowDate = (currentMessage, previousMessage) => {
     if (!previousMessage) return true
     
-    const currentDate = new Date(currentMessage.timestamp * 1000)
-    const previousDate = new Date(previousMessage.timestamp * 1000)
-    
-    return currentDate.toDateString() !== previousDate.toDateString()
+    try {
+      // El timestamp ya viene en formato ISO, no multiplicar por 1000
+      const currentDate = new Date(currentMessage.timestamp)
+      const previousDate = new Date(previousMessage.timestamp)
+      
+      if (isNaN(currentDate.getTime()) || isNaN(previousDate.getTime())) {
+        return true
+      }
+      
+      return currentDate.toDateString() !== previousDate.toDateString()
+    } catch (error) {
+      console.error('Error comparando fechas:', error)
+      return true
+    }
   }
 
   return (
