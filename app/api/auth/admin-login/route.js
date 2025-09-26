@@ -48,10 +48,11 @@ export async function POST(request) {
 
       // Establecer cookie de sesión admin
       response.cookies.set('admin-session', 'authenticated', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        httpOnly: false, // Cambiado para debugging
+        secure: false, // Cambiado para testing
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        maxAge: 24 * 60 * 60 * 1000, // 24 horas
+        path: '/'
       });
 
       console.log('✅ [LOGIN DEBUG] Cookie establecida, login exitoso');

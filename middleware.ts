@@ -20,6 +20,8 @@ export function middleware(req) {
   if (req.nextUrl.pathname.startsWith('/seller')) {
     const adminSession = req.cookies.get('admin-session');
     console.log('🔍 [MIDDLEWARE DEBUG] Admin session:', adminSession ? 'Presente' : 'Ausente');
+    console.log('🔍 [MIDDLEWARE DEBUG] Cookie value:', adminSession?.value);
+    console.log('🔍 [MIDDLEWARE DEBUG] All cookies:', req.cookies.getAll());
     
     if (!adminSession || adminSession.value !== 'authenticated') {
       console.log('❌ [MIDDLEWARE DEBUG] Acceso denegado a', req.nextUrl.pathname, '- redirigiendo a admin-login');
