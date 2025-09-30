@@ -25,6 +25,16 @@ const productSchema = new mongoose.Schema({
     stock: {
         type: Number,
         default: 100
+    },
+    // Especificaciones del producto (editables)
+    specifications: {
+        brand: { type: String, default: 'Genérica' },
+        color: { type: String, default: 'Múltiple' },
+        warranty: { type: String, default: 'Sin garantía' },
+        material: { type: String, default: 'N/A' },
+        weight: { type: String, default: 'N/A' },
+        dimensions: { type: String, default: 'N/A' },
+        origin: { type: String, default: 'N/A' }
     }
 })
 

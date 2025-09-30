@@ -51,13 +51,13 @@ const Orders = () => {
         }
         // Mapear los estados para que coincidan con los datos reales
         const statusMap = {
-            'pendiente': 'Order Placed',
-            'en_procesado': 'Processing',
-            'en_camino': 'Shipped',
-            'entregado': 'Delivered'
+            'pendiente': 'Pedido Realizado',
+            'en_procesado': 'En Proceso',
+            'en_camino': 'Enviado',
+            'entregado': 'Entregado'
         };
         const targetStatus = statusMap[status] || status;
-        return orders.filter(order => (order.status || 'Order Placed') === targetStatus);
+        return orders.filter(order => (order.status || 'Pedido Realizado') === targetStatus);
     };
 
     // Efecto para filtrar órdenes cuando cambia el filtro
@@ -91,10 +91,10 @@ const Orders = () => {
                             className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none text-sm bg-white"
                         >
                             <option value="todos">Todos</option>
-                            <option value="pendiente">🟡 Order Placed</option>
-                            <option value="en_procesado">🟠 Processing</option>
-                            <option value="en_camino">🚚 Shipped</option>
-                            <option value="entregado">✅ Delivered</option>
+                            <option value="pendiente">🟡 Pedido Realizado</option>
+                            <option value="en_procesado">🟠 En Proceso</option>
+                            <option value="en_camino">🚚 Enviado</option>
+                            <option value="entregado">✅ Entregado</option>
                         </select>
                     </div>
                 </div>
@@ -194,10 +194,10 @@ const Orders = () => {
                                                 }}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none text-sm bg-white"
                                             >
-                                            <option value="Order Placed">🟡 Order Placed</option>
-                                            <option value="Processing">🟠 Processing</option>
-                                            <option value="Shipped">🚚 Shipped</option>
-                                            <option value="Delivered">✅ Delivered</option>
+                                            <option value="Pedido Realizado">🟡 Pedido Realizado</option>
+                                            <option value="En Proceso">🟠 En Proceso</option>
+                                            <option value="Enviado">🚚 Enviado</option>
+                                            <option value="Entregado">✅ Entregado</option>
                                         </select>
                                     </div>
                                 </div>

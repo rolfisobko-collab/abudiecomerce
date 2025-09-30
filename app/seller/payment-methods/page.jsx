@@ -160,6 +160,9 @@ const PaymentMethods = () => {
                                         } else if (category === 'PIX' || category === 'TED') {
                                             country = 'BR';
                                             currency = 'BRL';
+                                        } else if (category === 'TRANSFERENCIA') {
+                                            country = 'PY';
+                                            currency = 'PYG';
                                         } else if (category.includes('USDT') || category === 'BTC' || category === 'ETH' || category === 'BNB') {
                                             country = 'GLOBAL';
                                             currency = 'USD';
@@ -182,6 +185,7 @@ const PaymentMethods = () => {
                                             <option value="CBU">CBU (Argentina)</option>
                                             <option value="PIX">PIX (Brasil)</option>
                                             <option value="TED">TED (Brasil)</option>
+                                            <option value="TRANSFERENCIA">Transferencia (Paraguay)</option>
                                         </>
                                     )}
                                     {formData.type === 'CRYPTO' && (
@@ -280,6 +284,8 @@ const PaymentMethods = () => {
                                                         autoName = `${bankName} - PIX`;
                                                     } else if (formData.category === 'TED') {
                                                         autoName = `${bankName} - TED`;
+                                                    } else if (formData.category === 'TRANSFERENCIA') {
+                                                        autoName = `${bankName} - Transferencia`;
                                                     }
                                                 }
                                                 setFormData({ ...formData, bankName, name: autoName });

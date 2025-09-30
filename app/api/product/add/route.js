@@ -34,9 +34,21 @@ export async function POST(request) {
         const price = formData.get('price');
         const offerPrice = formData.get('offerPrice');
         const minWholesaleQuantity = formData.get('minWholesaleQuantity');
+        const specificationsStr = formData.get('specifications');
+        const specifications = specificationsStr ? JSON.parse(specificationsStr) : {
+            brand: 'Genérica',
+            color: 'Múltiple',
+            warranty: 'Sin garantía',
+            material: 'N/A',
+            weight: 'N/A',
+            dimensions: 'N/A',
+            origin: 'N/A'
+        };
 
 
         const files = formData.getAll('images');
+        console.log('🔍 [PRODUCT ADD DEBUG] Archivos recibidos:', files.length)
+        console.log('🔍 [PRODUCT ADD DEBUG] Archivos:', files.map(f => f ? f.name : 'null'))
         let image = [];
 
         if (files && files.length > 0) {
@@ -62,6 +74,9 @@ export async function POST(request) {
             )
 
             image = result.map(result => result.secure_url)
+            console.log('🔍 [PRODUCT ADD DEBUG] URLs de imágenes generadas:', image)
+        } else {
+            console.log('🔍 [PRODUCT ADD DEBUG] No hay archivos para subir')
         }
 
         await connectDB()
@@ -75,7 +90,8 @@ export async function POST(request) {
             offerPrice:Number(offerPrice),
             minWholesaleQuantity:Number(minWholesaleQuantity) || 1,
             image,
-            date: Date.now()
+            date: Date.now(),
+            specifications
         };
 
 

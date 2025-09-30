@@ -147,7 +147,10 @@ export const AppContextProvider = (props) => {
             if (data.success) {
                 console.log('✅ [FRONTEND DEBUG] Usuario encontrado exitosamente en la base de datos')
                 setUserData(data.user)
-                setCartItems(data.user.cartItems)
+                // Actualizar el carrito instantáneamente
+                const userCart = data.user.cartItems || {}
+                console.log('🔍 [FRONTEND DEBUG] Carrito del usuario:', userCart)
+                setCartItems(userCart)
             } else {
                 console.log('❌ [FRONTEND DEBUG] Error del servidor:', data.message)
                 toast.error(data.message)
@@ -160,26 +163,26 @@ export const AppContextProvider = (props) => {
         }
     }
 
-    const addToCart = async (itemId) => {
+    const addToCart = async (itemId, quantity = 1) => {
 
         if (!user) {
-            return toast('Please login',{
+            return toast('Por favor inicia sesión',{
                 icon: '⚠️',
               })
         }
 
         let cartData = structuredClone(cartItems);
         if (cartData[itemId]) {
-            cartData[itemId] += 1;
+            cartData[itemId] += quantity;
         }
         else {
-            cartData[itemId] = 1;
+            cartData[itemId] = quantity;
         }
         setCartItems(cartData);
         if (user) {
             try {
                 await axios.post('/api/cart/update', {cartData})
-                toast.success('Item added to cart')
+                toast.success('Producto agregado al carrito')
             } catch (error) {
                 toast.error(error.message)
             }
@@ -277,16 +280,16 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         console.log('🔍 [FRONTEND DEBUG] useEffect ejecutado - usuario cambió:', user ? { id: user.id, email: user.email, role: user.role } : 'No hay usuario')
-        if (user) {
+        if (user && products.length > 0) {
             console.log('🔍 [FRONTEND DEBUG] Usuario detectado, llamando fetchUserData...')
             fetchUserData()
-        } else {
+        } else if (!user) {
             console.log('🔍 [FRONTEND DEBUG] No hay usuario, limpiando datos...')
             setUserData(false)
             setIsSeller(false)
             setCartItems({})
         }
-    }, [user])
+    }, [user, products.length])
 
     const value = {
         user, signOut, getToken,

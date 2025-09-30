@@ -1,12 +1,12 @@
 "use client"
 import { useEffect, useState } from "react";
-import { assets } from "@/assets/assets";
 import ProductCard from "@/components/ProductCard";
 import StarRating from "@/components/StarRating";
 import ProductRatingForm from "@/components/ProductRatingForm";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import MarkdownViewer from "@/components/MarkdownViewer";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import Loading from "@/components/Loading";
@@ -23,6 +23,7 @@ const Product = () => {
     const [productData, setProductData] = useState(null);
     const [ratings, setRatings] = useState([]);
     const [showRatingForm, setShowRatingForm] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const fetchProductData = async () => {
         const product = products.find(product => product._id === id);
@@ -169,9 +170,62 @@ const Product = () => {
                                     <span className="capitalize">{getCategoryName(productData.category)}</span>
                         </div>
                     </div>
-                            <p className="text-gray-600 text-lg leading-relaxed">
-                        {productData.description}
-                    </p>
+                            
+                            {/* Selector de cantidad y botones de acción */}
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 mb-6">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Cantidad</h3>
+                                <div className="flex items-center gap-4 mb-6">
+                                    <button 
+                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                        className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                        </svg>
+                                    </button>
+                                    <span className="text-2xl font-bold text-gray-900 min-w-[3rem] text-center">{quantity}</span>
+                                    <button 
+                                        onClick={() => setQuantity(quantity + 1)}
+                                        className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p className="text-sm text-gray-600 mb-6">
+                                    Cantidad mínima: {productData.minQuantity && productData.minQuantity > 0 ? productData.minQuantity : 1} unidades
+                                </p>
+                                
+                                {/* Botones de acción */}
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <button 
+                                        onClick={() => addToCart(productData._id, quantity)} 
+                                        className="flex-1 py-4 px-6 bg-white border-2 border-gray-300 text-gray-800 rounded-xl font-semibold hover:border-[#feecaf] hover:bg-[#feecaf]/10 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                    >
+                                        <div className="flex items-center justify-center gap-2">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                            </svg>
+                                            Agregar al Carrito ({quantity})
+                                        </div>
+                                    </button>
+                                    <button 
+                                        onClick={() => { 
+                                            addToCart(productData._id, quantity); 
+                                            router.push('/cart'); 
+                                        }} 
+                                        className="flex-1 py-4 px-6 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 rounded-xl font-semibold hover:from-yellow-300 hover:to-[#feecaf] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                    >
+                                        <div className="flex items-center justify-center gap-2">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                            </svg>
+                                            Comprar Ahora ({quantity})
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Precios */}
@@ -211,55 +265,79 @@ const Product = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex justify-between py-3 border-b border-gray-200/50">
                                     <span className="text-gray-600 font-medium">Marca</span>
-                                    <span className="text-gray-900 font-semibold">Genérica</span>
+                                    <span className="text-gray-900 font-semibold">
+                                        {productData.specifications?.brand || 'Genérica'}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between py-3 border-b border-gray-200/50">
                                     <span className="text-gray-600 font-medium">Color</span>
-                                    <span className="text-gray-900 font-semibold">Múltiple</span>
+                                    <span className="text-gray-900 font-semibold">
+                                        {productData.specifications?.color || 'Múltiple'}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between py-3 border-b border-gray-200/50">
                                     <span className="text-gray-600 font-medium">Categoría</span>
                                     <span className="text-gray-900 font-semibold capitalize">{getCategoryName(productData.category)}</span>
-                    </div>
+                                </div>
                                 <div className="flex justify-between py-3 border-b border-gray-200/50">
                                     <span className="text-gray-600 font-medium">Cantidad Mínima</span>
                                     <span className="text-gray-900 font-semibold">
                                         {productData.minQuantity && productData.minQuantity > 0 ? productData.minQuantity : 1} unidades
                                     </span>
-                    </div>
+                                </div>
+                                {productData.specifications?.warranty && productData.specifications.warranty !== 'N/A' && productData.specifications.warranty !== 'Sin garantía' && (
+                                    <div className="flex justify-between py-3 border-b border-gray-200/50">
+                                        <span className="text-gray-600 font-medium">Garantía</span>
+                                        <span className="text-gray-900 font-semibold">
+                                            {productData.specifications.warranty}
+                                        </span>
+                                    </div>
+                                )}
+                                {productData.specifications?.material && productData.specifications.material !== 'N/A' && (
+                                    <div className="flex justify-between py-3 border-b border-gray-200/50">
+                                        <span className="text-gray-600 font-medium">Material</span>
+                                        <span className="text-gray-900 font-semibold">
+                                            {productData.specifications.material}
+                                        </span>
+                                    </div>
+                                )}
+                                {productData.specifications?.weight && productData.specifications.weight !== 'N/A' && (
+                                    <div className="flex justify-between py-3 border-b border-gray-200/50">
+                                        <span className="text-gray-600 font-medium">Peso</span>
+                                        <span className="text-gray-900 font-semibold">
+                                            {productData.specifications.weight}
+                                        </span>
+                                    </div>
+                                )}
+                                {productData.specifications?.dimensions && productData.specifications.dimensions !== 'N/A' && (
+                                    <div className="flex justify-between py-3 border-b border-gray-200/50">
+                                        <span className="text-gray-600 font-medium">Dimensiones</span>
+                                        <span className="text-gray-900 font-semibold">
+                                            {productData.specifications.dimensions}
+                                        </span>
+                                    </div>
+                                )}
+                                {productData.specifications?.origin && productData.specifications.origin !== 'N/A' && (
+                                    <div className="flex justify-between py-3 border-b border-gray-200/50">
+                                        <span className="text-gray-600 font-medium">Origen</span>
+                                        <span className="text-gray-900 font-semibold">
+                                            {productData.specifications.origin}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        
-                        {/* Botones de acción */}
-                        <div className="space-y-4">
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button 
-                                    onClick={() => addToCart(productData._id)} 
-                                    className="flex-1 py-4 px-6 bg-white border-2 border-gray-300 text-gray-800 rounded-xl font-semibold hover:border-[#feecaf] hover:bg-[#feecaf]/10 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                                >
-                                    <div className="flex items-center justify-center gap-2">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                                        </svg>
-                                Agregar al Carrito
-                                    </div>
-                            </button>
-                                <button 
-                                    onClick={() => { 
-                                addToCart(productData._id); 
-                                router.push('/cart'); 
-                                    }} 
-                                    className="flex-1 py-4 px-6 bg-gradient-to-r from-[#feecaf] to-yellow-300 text-gray-800 rounded-xl font-semibold hover:from-yellow-300 hover:to-[#feecaf] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                                >
-                                    <div className="flex items-center justify-center gap-2">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                        </svg>
-                                Comprar Ahora
-                                    </div>
-                            </button>
+
+                        {/* Descripción del producto */}
+                        {productData.description && (
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Descripción del Producto</h3>
+                                <MarkdownViewer 
+                                    content={productData.description}
+                                    className="text-gray-700"
+                                />
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

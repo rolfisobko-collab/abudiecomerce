@@ -4,6 +4,7 @@ import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ImageUpload";
+import MarkdownEditor from "@/components/MarkdownEditor";
 
 const AddProduct = () => {
 
@@ -19,6 +20,17 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
+  
+  // Especificaciones del producto
+  const [specifications, setSpecifications] = useState({
+    brand: 'Genérica',
+    color: 'Múltiple',
+    warranty: 'Sin garantía',
+    material: 'N/A',
+    weight: 'N/A',
+    dimensions: 'N/A',
+    origin: 'N/A'
+  });
 
   const fetchCategories = async () => {
     try {
@@ -72,6 +84,7 @@ const AddProduct = () => {
     formData.append('price',price)
     formData.append('offerPrice',offerPrice)
     formData.append('minWholesaleQuantity',minWholesaleQuantity)
+    formData.append('specifications', JSON.stringify(specifications))
 
 
     for (let i = 0; i < files.length; i++) {
@@ -94,6 +107,15 @@ const AddProduct = () => {
         setPrice('');
         setOfferPrice('');
         setMinWholesaleQuantity('');
+        setSpecifications({
+          brand: 'Genérica',
+          color: 'Múltiple',
+          warranty: 'Sin garantía',
+          material: 'N/A',
+          weight: 'N/A',
+          dimensions: 'N/A',
+          origin: 'N/A'
+        });
       } else {
         toast.error(data.message);
       }
@@ -136,21 +158,12 @@ const AddProduct = () => {
           />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
-          <label
-            className="text-base font-medium"
-            htmlFor="product-description"
-          >
-            Descripción del Producto
-          </label>
-          <textarea
-            id="product-description"
-            rows={4}
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
-            placeholder="Escribir aquí"
-            onChange={(e) => setDescription(e.target.value)}
+          <MarkdownEditor
             value={description}
-            required
-          ></textarea>
+            onChange={setDescription}
+            placeholder="Escribe la descripción del producto usando Markdown..."
+            height={300}
+          />
         </div>
         <div className="flex items-center gap-5 flex-wrap">
           <div className="flex flex-col gap-1 w-32">
@@ -233,6 +246,105 @@ const AddProduct = () => {
             />
           </div>
         </div>
+        
+        {/* Especificaciones del Producto */}
+        <div className="flex flex-col gap-4 mt-6 p-6 bg-gray-50 rounded-lg border border-gray-300">
+          <h3 className="text-lg font-semibold text-gray-800">Especificaciones del Producto</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-brand">
+                Marca del Producto
+              </label>
+              <input
+                id="spec-brand"
+                type="text"
+                placeholder="Marca"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, brand: e.target.value})}
+                value={specifications.brand}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-color">
+                Color
+              </label>
+              <input
+                id="spec-color"
+                type="text"
+                placeholder="Color"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, color: e.target.value})}
+                value={specifications.color}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-warranty">
+                Garantía
+              </label>
+              <input
+                id="spec-warranty"
+                type="text"
+                placeholder="Garantía"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, warranty: e.target.value})}
+                value={specifications.warranty}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-material">
+                Material
+              </label>
+              <input
+                id="spec-material"
+                type="text"
+                placeholder="Material"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, material: e.target.value})}
+                value={specifications.material}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-weight">
+                Peso
+              </label>
+              <input
+                id="spec-weight"
+                type="text"
+                placeholder="Peso"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, weight: e.target.value})}
+                value={specifications.weight}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-dimensions">
+                Dimensiones
+              </label>
+              <input
+                id="spec-dimensions"
+                type="text"
+                placeholder="Dimensiones"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, dimensions: e.target.value})}
+                value={specifications.dimensions}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium" htmlFor="spec-origin">
+                Origen
+              </label>
+              <input
+                id="spec-origin"
+                type="text"
+                placeholder="Origen"
+                className="outline-none py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => setSpecifications({...specifications, origin: e.target.value})}
+                value={specifications.origin}
+              />
+            </div>
+          </div>
+        </div>
+        
         <button 
           type="submit" 
           disabled={isCreating}

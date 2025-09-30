@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import * as XLSX from 'xlsx';
 import { useDropzone } from 'react-dropzone';
 import { MdEdit, MdDelete, MdSave, MdCancel, MdUpload, MdDownload, MdSearch, MdFilterList, MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import MarkdownEditor from '@/components/MarkdownEditor';
 
 const ProductList = () => {
   const { router, user } = useAppContext()
@@ -18,6 +19,16 @@ const ProductList = () => {
   const [editingProduct, setEditingProduct] = useState(null)
   const [editForm, setEditForm] = useState({})
   const [editFiles, setEditFiles] = useState([])
+  const [editSpecifications, setEditSpecifications] = useState({
+    brand: 'Genérica',
+    color: 'Múltiple',
+    warranty: 'Sin garantía',
+    material: 'N/A',
+    weight: 'N/A',
+    dimensions: 'N/A',
+    origin: 'N/A'
+  })
+  const [isSaving, setIsSaving] = useState(false)
   const [globalFilter, setGlobalFilter] = useState('')
   const [excelData, setExcelData] = useState([])
   const [showImportModal, setShowImportModal] = useState(false)
@@ -77,12 +88,24 @@ const ProductList = () => {
       description: product.description,
       image: product.image.join(', ')
     })
+    // Cargar especificaciones del producto
+    setEditSpecifications(product.specifications || {
+      brand: 'Genérica',
+      color: 'Múltiple',
+      warranty: 'Sin garantía',
+      material: 'N/A',
+      weight: 'N/A',
+      dimensions: 'N/A',
+      origin: 'N/A'
+    })
     setEditFiles([]) // Resetear archivos de edición
   }
 
   const handleSave = async (productId) => {
+    setIsSaving(true)
     try {
       let updateData = { ...editForm }
+      updateData.specifications = editSpecifications
       
       // Si hay archivos nuevos, subirlos primero
       if (editFiles.length > 0) {
@@ -117,6 +140,8 @@ const ProductList = () => {
     } catch (error) {
       toast.error('Error al actualizar el producto')
       console.error('Error:', error)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -124,6 +149,15 @@ const ProductList = () => {
     setEditingProduct(null)
     setEditForm({})
     setEditFiles([])
+    setEditSpecifications({
+      brand: 'Genérica',
+      color: 'Múltiple',
+      warranty: 'Sin garantía',
+      material: 'N/A',
+      weight: 'N/A',
+      dimensions: 'N/A',
+      origin: 'N/A'
+    })
   }
 
   const handleDelete = async (productId) => {
@@ -812,15 +846,96 @@ const ProductList = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Descripción
-                    </label>
-                    <textarea
+                    <MarkdownEditor
                       value={editForm.description || ''}
-                      onChange={(e) => setEditForm({...editForm, description: e.target.value})}
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                      onChange={(value) => setEditForm({...editForm, description: value})}
+                      placeholder="Escribe la descripción del producto usando Markdown..."
+                      height={250}
                     />
+                  </div>
+
+                  {/* Especificaciones del Producto */}
+                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-300">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-4">Especificaciones del Producto</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Marca del Producto
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.brand}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, brand: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Color
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.color}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, color: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Garantía
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.warranty}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, warranty: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Material
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.material}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, material: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Peso
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.weight}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, weight: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Dimensiones
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.dimensions}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, dimensions: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Origen
+                        </label>
+                        <input
+                          type="text"
+                          value={editSpecifications.origin}
+                          onChange={(e) => setEditSpecifications({...editSpecifications, origin: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#feecaf] focus:border-transparent outline-none"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -900,10 +1015,24 @@ const ProductList = () => {
                   </button>
                   <button
                     onClick={() => handleSave(editingProduct)}
-                    className="px-4 py-2 bg-[#feecaf] text-black rounded-md hover:bg-[#feecaf]/80 flex items-center gap-2"
+                    disabled={isSaving}
+                    className={`px-4 py-2 rounded-md flex items-center gap-2 transition-all ${
+                      isSaving 
+                        ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                        : 'bg-[#feecaf] text-black hover:bg-[#feecaf]/80'
+                    }`}
                   >
-                    <MdSave size={16} />
-                    Guardar
+                    {isSaving ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+                        Guardando...
+                      </>
+                    ) : (
+                      <>
+                        <MdSave size={16} />
+                        Guardar
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
